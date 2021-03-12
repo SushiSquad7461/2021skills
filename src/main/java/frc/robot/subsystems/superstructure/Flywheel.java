@@ -8,7 +8,7 @@
 package frc.robot.subsystems.superstructure;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
+import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -21,8 +21,8 @@ import frc.robot.Constants;
 public class Flywheel extends PIDSubsystem {
 
 	// define variables
-	private final WPI_TalonSRX flywheelMain;
-	private final WPI_VictorSPX flywheelSecondary;
+	private final CANSparkMax flywheelMain;
+	private final CANSparkMax flywheelSecondary;
 	private final SimpleMotorFeedforward flywheelFeedforward;
 	private final CANCoder encoderMain;
 
@@ -30,9 +30,8 @@ public class Flywheel extends PIDSubsystem {
 		super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
 
 		// instantiate motor and encoders
-		flywheelMain = new WPI_TalonSRX(Constants.Flywheel.MAIN_ID);
-		flywheelSecondary = new WPI_VictorSPX(Constants.Flywheel.SECONDARY_ID);
-		encoderMain = new CANCoder(Constants.Flywheel.ENCODER);
+		flywheelMain = new CANSparkMax(Constants.Flywheel.MAIN_ID, brushless);
+		flywheelSecondary = new CANSparkMax(Constants.Flywheel.SECONDARY_ID, brushless);
 
 		flywheelFeedforward = new SimpleMotorFeedforward(
 				Constants.Flywheel.kS,
@@ -41,16 +40,18 @@ public class Flywheel extends PIDSubsystem {
 		);
 
 		// configure motor controllers
-		flywheelMain.configFactoryDefault();
+		// flywheelMain.configFactoryDefault(); this does not exist for sparks as far as i can tell
 		flywheelMain.setInverted(Constants.Flywheel.MAIN_INVERTED);
 		flywheelSecondary.setInverted(Constants.Flywheel.SECONDARY_INVERTED);
 		flywheelSecondary.follow(flywheelMain);
 
 		// config the peak and nominal outputs ([-1, 1] represents [-100, 100]%)
+		/*
 		flywheelMain.configNominalOutputForward(0, Constants.Flywheel.CONFIG_TIMEOUT);
 		flywheelMain.configNominalOutputReverse(0, Constants.Flywheel.CONFIG_TIMEOUT);
 		flywheelMain.configPeakOutputForward(1, Constants.Flywheel.CONFIG_TIMEOUT);
-		flywheelMain.configPeakOutputReverse(-1, Constants.Flywheel.CONFIG_TIMEOUT);
+		flywheelMain.configPeakOutputReverse(-1, Constants.Flywheel.CONFIG_TIMEOUT); 
+		pretty sure this doesn't exist either, although i'm not quite sure what it did anyways */
 
 		// the first number here is a 0 for position tolerance, we want
 		// it to be zero
@@ -89,7 +90,7 @@ public class Flywheel extends PIDSubsystem {
 	// return current flywheel speed
 	@Override
 	protected double getMeasurement() {
-		return encoderMain.getVelocity();
+		return flywheelMain.getVelocity();
 	}
 
 	// check if flywheel is at speed

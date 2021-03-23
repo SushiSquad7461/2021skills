@@ -7,15 +7,17 @@
 
 package frc.robot.subsystems.superstructure;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
-	// define variables
+	// define objects
 	private final WPI_VictorSPX intakeMotor;
-
+	public DoubleSolenoid intakeSolenoid;
+	
 	// constructor
 	public Intake() {
 
@@ -25,16 +27,22 @@ public class Intake extends SubsystemBase {
 		// configuration
 		intakeMotor.setSafetyEnabled(false);
 
+		intakeSolenoid = new DoubleSolenoid(Constants.Intake.SOLENOID_IN, Constants.Intake.SOLENOID_OUT);
 	}
 
 	public void startVore(){
 		intakeMotor.set(Constants.Intake.MAX_SPEED);
+		intakeSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	public void stopVore(){
 		intakeMotor.set(0);
+		intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
-	public void unVore() { intakeMotor.set(-Constants.Intake.MAX_SPEED); }
-
+	public void unVore() {
+		intakeMotor.set(-Constants.Intake.MAX_SPEED);
+		intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+	}
+	
 	@Override
 	public void periodic() {
 

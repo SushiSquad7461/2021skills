@@ -17,7 +17,11 @@ deploy {
             // or from command line. If not found an exception will be thrown.
             // You can use getTeamOrDefault(team) instead of getTeamNumber if you
             // want to store a team number in this file.
+<<<<<<< HEAD
             team = 7461
+=======
+            team = frc.getTeamOrDefault(7461)
+>>>>>>> c3e1de075d2ef6b2718e4915c8a8ba0b11dd9467
         }
     }
     artifacts {

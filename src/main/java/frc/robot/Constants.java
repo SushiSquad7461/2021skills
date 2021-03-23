@@ -18,6 +18,7 @@ public final class Constants {
 		public static final int BR_ID = 23;
 		public static final int BL_ID = 24;
 
+
 		// encoders
 		public static final int ENCODER_LEFT = 3;
 		public static final int ENCODER_RIGHT = 4;
@@ -51,7 +52,7 @@ public final class Constants {
 		// closed loop constants
 		public static final double wheelRadius = 3.0;
 		public static final double trackWidth = 0.6420;
-
+		
 		public static final double encoderResolution = 0;
 
 	}
@@ -109,6 +110,10 @@ public final class Constants {
 	public static final class Intake {
 		public static final int MOTOR_ID = 2;
 		public static final double MAX_SPEED = -0.65;
+		
+		// solenoid
+		public static final int SOLENOID_IN = 0;
+		public static final int SOLENOID_OUT = 1;
 	}
   
 	// camera

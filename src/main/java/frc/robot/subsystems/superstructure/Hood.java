@@ -8,14 +8,36 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-public class ExampleSubsystem extends SubsystemBase {
-  /**
-   * Creates a new ExampleSubsystem.
-   */
-  public ExampleSubsystem() {
+public class Hood extends PIDSubsystem {
 
+  private CANSparkMax hoodMain;
+  private CANEncoder hoodEncoder;
+
+  public Hood() {
+
+      // instantiate the neo550 and encoder
+      hoodMain = new CANSparkMax(Constants.Hood.HOOD_MOTOR_ID, brushless);
+      hoodEncoder = new CANEncoder(hoodMain);
   }
+
+  // raises the hood, lowers angle of shot
+  public void raiseHood() {
+      hoodMain.set(Constants.Hood.HOOD_MAX_SPEED);
+  }
+
+  // lowers hood, increases angle of shot
+  public void lowerHood() {
+      hoodMain.set(-Constants.Hood.HOOD_MAX_SPEED);
+  }
+
+
+  @Override 
+  protected void useOutput() {}
+
+  @Override 
+  protected double getMeasurement() {  }
 
   @Override
   public void periodic() {

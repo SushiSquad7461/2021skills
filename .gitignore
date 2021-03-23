@@ -1,4 +1,7 @@
 bin/
+.settings
+.classpath
+.project
 
 # https://github.com/github/gitignore/blob/master/Java.gitignore
 # Compiled class file

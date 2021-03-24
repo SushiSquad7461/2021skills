@@ -4,7 +4,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container: gradle:jdk8
+    container: gradle:jdk11
     steps:
       - uses: actions/checkout@v2
       - run: |

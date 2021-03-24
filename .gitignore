@@ -3,9 +3,6 @@ bin/
 .classpath
 .project
 
-# vim
-*.swp
-
 # https://github.com/github/gitignore/blob/master/Java.gitignore
 # Compiled class file
 *.class

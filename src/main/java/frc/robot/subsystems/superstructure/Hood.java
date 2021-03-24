@@ -9,9 +9,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMaxLowLevel;
+public class Hood extends SubsystemBase {
 
-public class Hood extends PIDSubsystem {
-
+  
+  CANSparkMaxLowLevel.MotorType brushless = CANSparkMaxLowLevel.MotorType.kBrushless;
   private CANSparkMax hoodMain;
   private CANEncoder hoodEncoder;
 
@@ -33,11 +37,12 @@ public class Hood extends PIDSubsystem {
   }
 
 
-  @Override 
   protected void useOutput() {}
 
-  @Override 
-  protected double getMeasurement() {  }
+  protected double getMeasurement() { 
+      return 0.0;
+      //CHANGE
+  }
 
   @Override
   public void periodic() {

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 public class Flywheel extends PIDSubsystem {
 
@@ -24,7 +25,8 @@ public class Flywheel extends PIDSubsystem {
 	private final CANSparkMax flywheelMain;
 	private final CANSparkMax flywheelSecondary;
 	private final SimpleMotorFeedforward flywheelFeedforward;
-	private final CANCoder encoderMain;
+	
+	CANSparkMaxLowLevel.MotorType brushless = CANSparkMaxLowLevel.MotorType.kBrushless;
 
 	public Flywheel() {
 		super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
@@ -59,7 +61,7 @@ public class Flywheel extends PIDSubsystem {
 	}
 
 	public void stop() {
-		flywheelMain.set(ControlMode.Velocity, 0);
+		flywheelMain.set(0);
 	}
 
 	@Override
@@ -84,13 +86,14 @@ public class Flywheel extends PIDSubsystem {
 		double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
 		double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
 
-		flywheelMain.setVoltage(output + feedForward);
+		//flywheelMain.set(output + feedForward);
+		flywheelMain.set(1.0);
 	}
 
 	// return current flywheel speed
 	@Override
 	protected double getMeasurement() {
-		return flywheelMain.getVelocity();
+		return flywheelMain.get();
 	}
 
 	// check if flywheel is at speed

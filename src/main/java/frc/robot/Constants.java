@@ -13,10 +13,10 @@ public final class Constants {
 	public static final class Drivetrain {
 
 		// motors
-		public static final int FL_ID = 21;
-		public static final int FR_ID = 22;
-		public static final int BR_ID = 23;
-		public static final int BL_ID = 24;
+		public static final int FL_ID = 18;
+		public static final int FR_ID = 15;
+		public static final int BR_ID = 14;
+		public static final int BL_ID = 1;
 
 
 		// encoders
@@ -61,8 +61,8 @@ public final class Constants {
 	public static final class Flywheel {
 
 		// motors
-		public static final int MAIN_ID = 11;
-		public static final int SECONDARY_ID = 10;
+		public static final int MAIN_ID = 13;
+		public static final int SECONDARY_ID = 3;
 
 		public static final boolean MAIN_INVERTED = false;
 		public static final boolean SECONDARY_INVERTED = true;
@@ -74,7 +74,7 @@ public final class Constants {
 		public static final double SPEED = 5100.7461;
 
 		// don't tune these--documentation stated constants for entering rpm
-		public static final int TICKS_PER_ROTATION = 4096; // ticks per one encoder rotation
+		public static final int TICKS_PER_ROTATION = 42; // ticks per one encoder rotation
 		public static final double SETPOINT_CONSTANT = 0.001667; // 100 ms / 1 min
 
 		// pid constants
@@ -95,9 +95,9 @@ public final class Constants {
 
 	// hopper
 	public static final class Hopper {
-		public static final int FAST_ID = 1;
-		public static final int SLOW_ID = 6;
-
+		public static final int FAST_ID = 11;
+		public static final int SLOW_ID = 10;
+		public static final int FLOOR_ID = 9;
 		public static final double MAX_SPEED = -0.6;
 		public static final double SLOW_SPEED = -0.2;
 		public static final double REVERSE_SPEED = 0.6;
@@ -115,7 +115,11 @@ public final class Constants {
 		public static final int SOLENOID_IN = 0;
 		public static final int SOLENOID_OUT = 1;
 	}
-  
+	public static final class Hood {
+		public static final double HOOD_MAX_SPEED = 0.3;
+		public static final int HOOD_MOTOR_ID = 12;
+
+	}
 	// camera
 	public static final class Camera {
 

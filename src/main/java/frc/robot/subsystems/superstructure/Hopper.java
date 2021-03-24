@@ -22,13 +22,13 @@ public class Hopper extends SubsystemBase {
 	//  define variables
 	private final WPI_TalonSRX hopperFast;
 	private final WPI_VictorSPX hopperSlow;
-
+	private final TalonSRX hopperFloor;
 	public Hopper() {
 
 		//  instantiate motors
 		hopperFast = new WPI_TalonSRX(Constants.Hopper.FAST_ID);
 		hopperSlow = new WPI_VictorSPX(Constants.Hopper.SLOW_ID);
-
+		hopperFloor = new TalonSRX(Constants.Hopper.FLOOR_ID);
 		//  config the peak and the minimum outputs to tell if there was a spike
 		// [-1,1] represents [-100%, 100%]
 		hopperFast.configNominalOutputForward(0, Constants.Hopper.CONFIG_TIMEOUT);
@@ -46,7 +46,7 @@ public class Hopper extends SubsystemBase {
 
 		hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.MAX_SPEED);
 		hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.SLOW_SPEED);
-
+		hopperFloor.set(ControlMode.PercentOutput, 1.0);
 	}
 
 	// reverse for anti-jam
@@ -62,7 +62,7 @@ public class Hopper extends SubsystemBase {
 
 		hopperFast.set(ControlMode.PercentOutput, 0);
 		hopperSlow.set(ControlMode.PercentOutput, 0);
-
+		hopperFloor.set(ControlMode.PercentOutput, 0);
 	}
 
 	@Override

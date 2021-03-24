@@ -106,6 +106,9 @@ public class Drivetrain extends SubsystemBase {
 			differentialDrive.curvatureDrive(linearVelocity * Constants.Drivetrain.SLOW_SPEED, angularVelocity, isQuickTurn);
 		} else {
 			SmartDashboard.putNumber("auto velo", 5);
+			SmartDashboard.putNumber("left speed", frontLeft.get());
+			SmartDashboard.putNumber("right speed", frontRight.get());
+			SmartDashboard.putNumber("ang vel", angularVelocity);
 			differentialDrive.curvatureDrive(linearVelocity, angularVelocity, isQuickTurn);
 		}
 	}

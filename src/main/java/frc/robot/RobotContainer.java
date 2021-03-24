@@ -19,7 +19,6 @@ import frc.robot.commands.Shoot;
 import frc.robot.subsystems.superstructure.*;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.chassis.Drivetrain;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.superstructure.Hopper;
 import frc.robot.subsystems.superstructure.Intake;
@@ -34,7 +33,6 @@ public class RobotContainer {
   public final Flywheel s_flywheel;
 	private final Hopper s_hopper;
   public static Intake s_intake;
-  public static Climb s_climb;
 
 
   // initialize commands
@@ -53,7 +51,6 @@ public class RobotContainer {
     s_flywheel = new Flywheel();
 		s_hopper = new Hopper();
     s_intake = new Intake();
-    s_climb = new Climb();
     
     // define commands
     c_shoot = new Shoot(s_flywheel);
@@ -90,17 +87,9 @@ public class RobotContainer {
             .whenPressed(new RunCommand(s_intake::unVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
     
-    new JoystickButton(driveController, XboxController.Button.kY.value)
-            .whenPressed(new InstantCommand(s_climb::climbUp))
-            .whenReleased(new InstantCommand(s_climb::stopClimb));
 
-    new JoystickButton(driveController, XboxController.Button.kB.value)
-            .whenPressed(new InstantCommand(s_climb::climbDown))
-            .whenReleased(new InstantCommand(s_climb::stopClimb));
 
-		new JoystickButton(driveController, XboxController.Button.kStart.value)
-				.whenPressed(new InstantCommand(s_climb::resetClimb))
-				.whenReleased(new InstantCommand(s_climb::stopClimb));
+
 	}
 
 

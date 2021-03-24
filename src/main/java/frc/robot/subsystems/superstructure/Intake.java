@@ -6,41 +6,41 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems.superstructure;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
 	// define objects
-	private final WPI_VictorSPX intakeMotor;
+	private final WPI_TalonSRX intakeMotor;
 	public DoubleSolenoid intakeSolenoid;
 	
 	// constructor
 	public Intake() {
 
 		// instantiate motor controllers
-		intakeMotor = new WPI_VictorSPX(Constants.Intake.MOTOR_ID);
+		intakeMotor = new WPI_TalonSRX(Constants.Intake.MOTOR_ID);
 
 		// configuration
 		intakeMotor.setSafetyEnabled(false);
 
-		intakeSolenoid = new DoubleSolenoid(Constants.Intake.SOLENOID_IN, Constants.Intake.SOLENOID_OUT);
+		//intakeSolenoid = new DoubleSolenoid(Constants.Intake.SOLENOID_IN, Constants.Intake.SOLENOID_OUT);
 	}
 
 	public void startVore(){
-		intakeMotor.set(Constants.Intake.MAX_SPEED);
-		intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+		intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.MAX_SPEED);
+	//	intakeSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	public void stopVore(){
-		intakeMotor.set(0);
-		intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+		intakeMotor.set(ControlMode.PercentOutput, 0);
+	//	intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 	public void unVore() {
-		intakeMotor.set(-Constants.Intake.MAX_SPEED);
-		intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+		intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.MAX_SPEED);
+	//	intakeSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	@Override

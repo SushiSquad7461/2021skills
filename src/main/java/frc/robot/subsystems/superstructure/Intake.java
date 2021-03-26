@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems.superstructure;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,37 +15,39 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
-	// define objects
-	private final WPI_TalonSRX intakeMotor;
-	public DoubleSolenoid intakeSolenoid;
-	
-	// constructor
-	public Intake() {
+    // fields
+    private final WPI_TalonSRX intakeMotor;
+    public DoubleSolenoid intakeSolenoid;
 
-		// instantiate motor controllers
-		intakeMotor = new WPI_TalonSRX(Constants.Intake.MOTOR_ID);
+    public Intake() {
+        // instantiate and configure motors
+        intakeMotor = new WPI_TalonSRX(Constants.Intake.MOTOR_ID);
+        intakeMotor.setSafetyEnabled(false);
 
-		// configuration
-		intakeMotor.setSafetyEnabled(false);
+        // instantiate and configure solenoid
+        //intakeSolenoid = new DoubleSolenoid(Constants.Intake.SOLENOID_IN, Constants.Intake.SOLENOID_OUT);
+    }
 
-		//intakeSolenoid = new DoubleSolenoid(Constants.Intake.SOLENOID_IN, Constants.Intake.SOLENOID_OUT);
-	}
+    // begin intaking
+    public void startVore() {
+        intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.MAX_SPEED);
+        //intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
 
-	public void startVore(){
-		intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.MAX_SPEED);
-	//	intakeSolenoid.set(DoubleSolenoid.Value.kForward);
-	}
-	public void stopVore(){
+    // reverse intake movement
+    public void unVore() {
+        intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.MAX_SPEED);
+        //intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+	// stop intake movement
+	public void stopVore() {
 		intakeMotor.set(ControlMode.PercentOutput, 0);
-	//	intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+		//intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
-	public void unVore() {
-		intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.MAX_SPEED);
-	//	intakeSolenoid.set(DoubleSolenoid.Value.kForward);
-	}
-	
-	@Override
-	public void periodic() {
 
-	}
+    @Override
+    public void periodic() {
+
+    }
 }

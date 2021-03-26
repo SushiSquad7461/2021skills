@@ -21,84 +21,72 @@ import com.revrobotics.CANSparkMaxLowLevel;
 
 public class Flywheel extends PIDSubsystem {
 
-	// define variables
-	private final CANSparkMax flywheelMain;
-	private final CANSparkMax flywheelSecondary;
-	private final SimpleMotorFeedforward flywheelFeedforward;
-	
-	CANSparkMaxLowLevel.MotorType brushless = CANSparkMaxLowLevel.MotorType.kBrushless;
+    // fields
+    private final CANSparkMax flywheelMain;
+    private final CANSparkMax flywheelSecondary;
+    private final SimpleMotorFeedforward flywheelFeedforward;
 
-	public Flywheel() {
-		super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
+    public Flywheel() {
+        super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
 
-		// instantiate motor and encoders
-		flywheelMain = new CANSparkMax(Constants.Flywheel.MAIN_ID, brushless);
-		flywheelSecondary = new CANSparkMax(Constants.Flywheel.SECONDARY_ID, brushless);
+        // instantiate and configure motors
+        flywheelMain = new CANSparkMax(Constants.Flywheel.MAIN_ID, Constants.Flywheel.MOTOR_TYPE);
+        flywheelSecondary = new CANSparkMax(Constants.Flywheel.SECONDARY_ID, Constants.Flywheel.MOTOR_TYPE);
+        flywheelFeedforward = new SimpleMotorFeedforward(
+                Constants.Flywheel.kS,
+                Constants.Flywheel.kV,
+                Constants.Flywheel.kA
+        );
 
-		flywheelFeedforward = new SimpleMotorFeedforward(
-				Constants.Flywheel.kS,
-				Constants.Flywheel.kV,
-				Constants.Flywheel.kA
-		);
+        flywheelMain.restoreFactoryDefaults();
+        flywheelSecondary.restoreFactoryDefaults();
+        flywheelMain.setInverted(Constants.Flywheel.MAIN_INVERTED);
+        flywheelSecondary.setInverted(Constants.Flywheel.SECONDARY_INVERTED);
+        flywheelSecondary.follow(flywheelMain);
 
-		// configure motor controllers
-		// flywheelMain.configFactoryDefault(); this does not exist for sparks as far as i can tell
-		flywheelMain.setInverted(Constants.Flywheel.MAIN_INVERTED);
-		flywheelSecondary.setInverted(Constants.Flywheel.SECONDARY_INVERTED);
-		flywheelSecondary.follow(flywheelMain);
-
-		// config the peak and nominal outputs ([-1, 1] represents [-100, 100]%)
-		/*
-		flywheelMain.configNominalOutputForward(0, Constants.Flywheel.CONFIG_TIMEOUT);
+        // config the peak and nominal outputs ([-1, 1] represents [-100, 100]%)
+		/*flywheelMain.configNominalOutputForward(0, Constants.Flywheel.CONFIG_TIMEOUT);
 		flywheelMain.configNominalOutputReverse(0, Constants.Flywheel.CONFIG_TIMEOUT);
 		flywheelMain.configPeakOutputForward(1, Constants.Flywheel.CONFIG_TIMEOUT);
 		flywheelMain.configPeakOutputReverse(-1, Constants.Flywheel.CONFIG_TIMEOUT); 
 		pretty sure this doesn't exist either, although i'm not quite sure what it did anyways */
 
-		// the first number here is a 0 for position tolerance, we want
-		// it to be zero
-		this.getController().setTolerance(0, Constants.Flywheel.ERROR_TOLERANCE);
-	}
+        // the first number here is a 0 for position tolerance, we want it to be zero
+        this.getController().setTolerance(0, Constants.Flywheel.ERROR_TOLERANCE);
+    }
 
-	public void stop() {
-		flywheelMain.set(0);
-	}
+    public void stop() {
+        flywheelMain.set(0);
+    }
 
-	@Override
-	public void periodic() {
-		this.getController().setSetpoint(Constants.Flywheel.SPEED);
+    @Override
+    public void periodic() {
+        this.getController().setSetpoint(Constants.Flywheel.SPEED);
+        SmartDashboard.putNumber("flywheel rpm", this.getMeasurement()); // rpm
+        SmartDashboard.putBoolean("flywheel at speed", isAtSpeed()); // revved up boolean
+    }
 
-		// put rpm on dashboard
-		SmartDashboard.putNumber("flywheel rpm", this.getMeasurement());
+    @Override
+    protected void useOutput(double output, double setpoint) {
+    }
 
-		// put revved up boolean on dashboard
-		SmartDashboard.putBoolean("flywheel at speed", isAtSpeed());
+    public void enableFlywheel() {
+        double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
+        double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
 
-		SmartDashboard.putNumber("flywheel rpm 2", this.getMeasurement());
+        //flywheelMain.set(output + feedForward);
+        flywheelMain.set(1.0);
+    }
 
-		//RobotContainer.operatorController.setRumble(GenericHID.RumbleType.kRightRumble, Math.pow(encoderMain.getVelocity() / 12000, 3));
-	}
+    // return current flywheel speed
+    @Override
+    protected double getMeasurement() {
+        return flywheelMain.get();
+    }
 
-	@Override
-	protected void useOutput(double output, double setpoint) { }
-
-	public void enableFlywheel() {
-		double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
-		double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
-
-		//flywheelMain.set(output + feedForward);
-		flywheelMain.set(1.0);
-	}
-
-	// return current flywheel speed
-	@Override
-	protected double getMeasurement() {
-		return flywheelMain.get();
-	}
-
-	// check if flywheel is at speed
-	public boolean isAtSpeed() {
-		return this.getMeasurement() >= Constants.Flywheel.SPEED - Constants.Flywheel.SPEED_TOLERANCE;
-	}
+    // check if flywheel is at speed
+    public boolean isAtSpeed() {
+        return this.getMeasurement() >= Constants.Flywheel.SPEED - Constants.Flywheel.SPEED_TOLERANCE;
+    }
 
 }

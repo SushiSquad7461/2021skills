@@ -6,16 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
 
-	// controllers
-	public static final int DRIVE_CONTROLLER = 0;
-	public static final int OPERATOR_CONTROLLER = 1;
-
-	// configuration constants
-	public static final double TRIGGER_TOLERANCE = 0.3;
-
 	// boolean from trigger input
 	public static boolean getTriggerBoolean(XboxController controller, GenericHID.Hand hand) {
-    	return controller.getTriggerAxis(hand) > TRIGGER_TOLERANCE;
+    	return controller.getTriggerAxis(hand) > Constants.OI.TRIGGER_TOLERANCE;
 	}
 
   // cubed -1 to 1 output from trigger controllers

@@ -27,84 +27,66 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
+
 	// initialize subsystems
-	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final Drivetrain s_drive;
-  public final Flywheel s_flywheel;
-	private final Hopper s_hopper;
-  public static Intake s_intake;
+    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+    public final Drivetrain s_drive;
+    public final Flywheel s_flywheel;
+    private final Hopper s_hopper;
+    public static Intake s_intake;
 
+    // initialize commands
+    private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+    public final Shoot c_shoot;
+    public final AutoShoot c_autoShoot;
+    public final AutoDrive c_autoDrive;
 
-  // initialize commands
-	private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  public final Shoot c_shoot;
-  public final AutoShoot c_autoShoot;
-  public final AutoDrive c_autoDrive;
+    // create joysticks
+    public static final XboxController driveController = new XboxController(Constants.OI.DRIVE_CONTROLLER);
+    public static final XboxController operatorController = new XboxController(Constants.OI.OPERATOR_CONTROLLER);
 
-	// create joysticks
-	public static final XboxController driveController = new XboxController(OI.DRIVE_CONTROLLER);
-	public static final XboxController operatorController = new XboxController(OI.OPERATOR_CONTROLLER);
+    public RobotContainer() {
+        // subsystems
+        s_drive = new Drivetrain();
+        s_flywheel = new Flywheel();
+        s_hopper = new Hopper();
+        s_intake = new Intake();
 
-	public RobotContainer() {
-    // define subsystems
- 		s_drive = new Drivetrain();
-    s_flywheel = new Flywheel();
-		s_hopper = new Hopper();
-    s_intake = new Intake();
-    
-    // define commands
-    c_shoot = new Shoot(s_flywheel);
-    c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
-    c_autoDrive = new AutoDrive(s_drive);
-    
-    // set default commands
-    s_flywheel.setDefaultCommand(c_shoot);
-    
-    s_drive.setDefaultCommand(new RunCommand(() -> s_drive.curveDrive(
-    		OI.getTriggerOutput(driveController),
-			OI.getLeftJoystickAxis(driveController),
-			driveController.getXButton()), s_drive));
+        // commands
+        c_shoot = new Shoot(s_flywheel);
+        c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
+        c_autoDrive = new AutoDrive(s_drive);
 
-    //new InstantCommand(() -> s_climb.stopClimb());
+        // set default commands
+        s_flywheel.setDefaultCommand(c_shoot);
 
-    configureButtonBindings();
-	}
+        s_drive.setDefaultCommand(new RunCommand(() -> s_drive.curveDrive(
+                OI.getTriggerOutput(driveController),
+                OI.getLeftJoystickAxis(driveController),
+                driveController.getXButton()), s_drive));
 
-	private void configureButtonBindings() {
+        configureButtonBindings();
+    }
 
-	// run hopper
-	new JoystickButton(operatorController, XboxController.Button.kA.value)
-			.whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
-			.whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
-    
+    private void configureButtonBindings() {
+        // run hopper
+        new JoystickButton(operatorController, XboxController.Button.kA.value)
+                .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
+                .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
+
         // intake
-    new JoystickButton(operatorController, XboxController.Button.kA.value)
-        .whenPressed(new RunCommand(s_intake::startVore, s_intake))
-        .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+        new JoystickButton(operatorController, XboxController.Button.kA.value)
+                .whenPressed(new RunCommand(s_intake::startVore, s_intake))
+                .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
 
-    // intake unjam
-    new JoystickButton(operatorController, XboxController.Button.kY.value)
-            .whenPressed(new RunCommand(s_intake::unVore, s_intake))
-            .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
-    
+        // intake unjam
+        new JoystickButton(operatorController, XboxController.Button.kY.value)
+                .whenPressed(new RunCommand(s_intake::unVore, s_intake))
+                .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+    }
 
-
-
-	}
-
-
-
-	public SequentialCommandGroup getAutonomousCommand() {
-		return new SequentialCommandGroup(
-				new RunCommand(() -> s_drive.curveDrive(0.7, 0, false),
-						s_drive).withTimeout(4),
-				c_autoShoot);
-	}
-
-	public SequentialCommandGroup getSecondAutoCommand() {
-		return new SequentialCommandGroup(
-				new RunCommand(() -> s_drive.curveDrive(0.7, 0, false),
-						s_drive).withTimeout(4));
-	}
+    public SequentialCommandGroup getAutonomousCommand() {
+    	return new SequentialCommandGroup();
+    }
 
 }

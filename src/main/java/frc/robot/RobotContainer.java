@@ -60,7 +60,8 @@ public class RobotContainer {
         // set default commands
         s_flywheel.setDefaultCommand(c_shoot);
 
-        s_drive.setDefaultCommand(new RunCommand(() -> s_drive.curveDrive(
+        s_drive.setDefaultCommand(new RunCommand(
+            () -> s_drive.curveDrive(
                 OI.getTriggerOutput(driveController),
                 OI.getLeftJoystickAxis(driveController),
                 driveController.getXButton()), s_drive));
@@ -71,22 +72,22 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // run hopper
         new JoystickButton(operatorController, XboxController.Button.kA.value)
-                .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
-                .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
+            .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
+            .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
 
         // intake
         new JoystickButton(operatorController, XboxController.Button.kA.value)
-                .whenPressed(new RunCommand(s_intake::startVore, s_intake))
-                .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+            .whenPressed(new RunCommand(s_intake::startVore, s_intake))
+            .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
 
         // intake unjam
         new JoystickButton(operatorController, XboxController.Button.kY.value)
-                .whenPressed(new RunCommand(s_intake::unVore, s_intake))
-                .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+            .whenPressed(new RunCommand(s_intake::unVore, s_intake))
+            .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
     }
 
     public SequentialCommandGroup getAutonomousCommand() {
-    	return new SequentialCommandGroup();
+        return new SequentialCommandGroup();
     }
 
 }

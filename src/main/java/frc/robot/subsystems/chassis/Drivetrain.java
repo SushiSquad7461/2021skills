@@ -37,7 +37,6 @@ public class Drivetrain extends SubsystemBase {
     public DifferentialDriveKinematics driveKinematics; // calculates kinematics
 
     public Drivetrain() {
-
         // define fields
         driveInverted = false;
         slowMode = false;

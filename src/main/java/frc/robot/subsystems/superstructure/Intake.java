@@ -37,14 +37,14 @@ public class Intake extends SubsystemBase {
     // reverse intake movement
     public void unVore() {
         intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.MAX_SPEED);
-        //intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+        //intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
-	// stop intake movement
-	public void stopVore() {
-		intakeMotor.set(ControlMode.PercentOutput, 0);
-		//intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-	}
+    // stop intake movement
+    public void stopVore() {
+        intakeMotor.set(ControlMode.PercentOutput, 0);
+        //intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
 
     @Override
     public void periodic() {

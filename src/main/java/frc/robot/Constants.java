@@ -19,8 +19,7 @@ public final class Constants {
         public static final int FR_ID = 15;
         public static final int BR_ID = 14;
         public static final int BL_ID = 1;
-        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE =
-                CANSparkMaxLowLevel.MotorType.kBrushless; // motor type brushless or brushed
+        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
 
         // open loop configuration
         public static final int CURRENT_LIMIT = 35;
@@ -35,8 +34,7 @@ public final class Constants {
         // motors
         public static final int MAIN_ID = 13;
         public static final int SECONDARY_ID = 3;
-        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE =
-                CANSparkMaxLowLevel.MotorType.kBrushless; // motor type brushless or brushed
+        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
 
         public static final boolean MAIN_INVERTED = false;
         public static final boolean SECONDARY_INVERTED = true;
@@ -93,11 +91,9 @@ public final class Constants {
 
     // hood
     public static final class Hood {
-        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE =
-                CANSparkMaxLowLevel.MotorType.kBrushless;
+        public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
         public static final double HOOD_MAX_SPEED = 0.3;
         public static final int HOOD_MOTOR = 12;
-
     }
 
     // camera

@@ -36,9 +36,12 @@ public class Hood extends SubsystemBase {
     }
 
     // stop hood movement
-    public void stopHood() { hoodMain.set(0); }
+    public void stopHood() {
+        hoodMain.set(0);
+    }
 
     protected void useOutput() {
+
     }
 
     protected double getMeasurement() {

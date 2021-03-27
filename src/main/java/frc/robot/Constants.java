@@ -89,11 +89,14 @@ public final class Constants {
         public static final int SOLENOID_OUT = 1;
     }
 
-    // hood
     public static final class Hood {
+        public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
-        public static final double HOOD_MAX_SPEED = 0.3;
-        public static final int HOOD_MOTOR = 12;
+        public static final double MAX_SPEED = 0.3;
+        public static final double kP = 0.01;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        public static final double SETPOINT = (25.0/360.0) * (332.0/14.0) * 15;
     }
 
     // camera
@@ -102,11 +105,11 @@ public final class Constants {
     }
 
     // OI
-	public static final class OI {
-		public static final int DRIVE_CONTROLLER = 0;
-		public static final int OPERATOR_CONTROLLER = 1;
+    public static final class OI {
+        public static final int DRIVE_CONTROLLER = 0;
+        public static final int OPERATOR_CONTROLLER = 1;
 
-		public static final double TRIGGER_TOLERANCE = 0.3;
-	}
+        public static final double TRIGGER_TOLERANCE = 0.3;
+    }
 
 }

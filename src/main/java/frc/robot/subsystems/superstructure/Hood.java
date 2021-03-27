@@ -7,50 +7,43 @@
 
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants;
 
-public class Hood extends SubsystemBase {
-
-    // fields
-    private CANSparkMax hoodMain; // main motor
-    private CANEncoder hoodEncoder; // main motor encoder
+public class Hood extends PIDSubsystem {
+    private CANSparkMax hoodMain;
+    private CANEncoder hoodEncoder;
 
     public Hood() {
-        // instantiate neo550 and encoder
-        hoodMain = new CANSparkMax(Constants.Hood.HOOD_MOTOR, Constants.Hood.MOTOR_TYPE);
-        hoodEncoder = hoodMain.getEncoder();
-    }
+        super(new PIDController(Constants.Hood.kP, Constants.Hood.kI, Constants.Hood.kD));
 
-    // raises the hood, lowers angle of shot
-    public void raiseHood() {
-        hoodMain.set(Constants.Hood.HOOD_MAX_SPEED);
-    }
+        this.hoodMain = new CANSparkMax(Constants.Hood.MOTOR_ID, Constants.Hood.MOTOR_TYPE);
+        hoodMain.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        this.hoodEncoder = this.hoodMain.getEncoder();
+        this.zeroHood();
+        this.setSetpoint(Constants.Hood.SETPOINT);
 
-    // lowers hood, increases angle of shot
-    public void lowerHood() {
-        hoodMain.set(-Constants.Hood.HOOD_MAX_SPEED);
-    }
-
-    // stop hood movement
-    public void stopHood() {
-        hoodMain.set(0);
-    }
-
-    protected void useOutput() {
-
-    }
-
-    protected double getMeasurement() {
-        return 0.0;
-        //CHANGE
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
+    public void useOutput(double output, double setpoint) {
+        this.hoodMain.set(output);
+        SmartDashboard.putNumber("output", output);
+        SmartDashboard.putNumber("bruh position", hoodEncoder.getPosition());
+        SmartDashboard.putNumber("bruh set", this.getSetpoint() );
     }
+
+    @Override
+    public double getMeasurement() {
+        return this.hoodEncoder.getPosition();
+    }
+
+    public void zeroHood() {
+        this.hoodEncoder.setPosition(0.0);
+    }
+
 }

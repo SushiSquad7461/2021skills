@@ -33,10 +33,10 @@ public class RobotContainer {
     public final Drivetrain s_drive;
     public final Flywheel s_flywheel;
     private final Hopper s_hopper;
-    public static Intake s_intake;
+    public final Intake s_intake;
+    public final Hood s_hood;
 
     // initialize commands
-    private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
     public final Shoot c_shoot;
     public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
@@ -51,6 +51,7 @@ public class RobotContainer {
         s_flywheel = new Flywheel();
         s_hopper = new Hopper();
         s_intake = new Intake();
+        s_hood = new Hood();
 
         // commands
         c_shoot = new Shoot(s_flywheel);
@@ -59,6 +60,8 @@ public class RobotContainer {
 
         // set default commands
         s_flywheel.setDefaultCommand(c_shoot);
+
+        s_hood.enable();
 
         s_drive.setDefaultCommand(new RunCommand(
             () -> s_drive.curveDrive(

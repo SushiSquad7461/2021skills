@@ -19,52 +19,49 @@ import javax.naming.ldap.Control;
 
 public class Hopper extends SubsystemBase {
 
-	//  define variables
-	private final WPI_TalonSRX hopperFast;
-	private final WPI_VictorSPX hopperSlow;
-	private final TalonSRX hopperFloor;
-	public Hopper() {
+    // fields
+    private final WPI_TalonSRX hopperFast;
+    private final WPI_VictorSPX hopperSlow;
+    private final WPI_TalonSRX hopperFloor;
 
-		//  instantiate motors
-		hopperFast = new WPI_TalonSRX(Constants.Hopper.FAST_ID);
-		hopperSlow = new WPI_VictorSPX(Constants.Hopper.SLOW_ID);
-		hopperFloor = new TalonSRX(Constants.Hopper.FLOOR_ID);
-		//  config the peak and the minimum outputs to tell if there was a spike
-		// [-1,1] represents [-100%, 100%]
-		hopperFast.configNominalOutputForward(0, Constants.Hopper.CONFIG_TIMEOUT);
-		hopperFast.configNominalOutputReverse(0, Constants.Hopper.CONFIG_TIMEOUT);
-		hopperFast.configPeakOutputForward(1, Constants.Hopper.CONFIG_TIMEOUT);
-		hopperFast.configPeakOutputReverse(-1, Constants.Hopper.CONFIG_TIMEOUT);
+    public Hopper() {
+        // instantiate motors
+        hopperFast = new WPI_TalonSRX(Constants.Hopper.FAST_ID);
+        hopperSlow = new WPI_VictorSPX(Constants.Hopper.SLOW_ID);
+        hopperFloor = new WPI_TalonSRX(Constants.Hopper.FLOOR_ID);
 
-		//  sets the same configs to hopperSlow
-		hopperSlow.follow(hopperFast);
+        // config the peak and the minimum outputs to tell if there was a spike
+        // [-1,1] represents [-100%, 100%]
+        hopperFast.configNominalOutputForward(0, Constants.Hopper.CONFIG_TIMEOUT);
+        hopperFast.configNominalOutputReverse(0, Constants.Hopper.CONFIG_TIMEOUT);
+        hopperFast.configPeakOutputForward(1, Constants.Hopper.CONFIG_TIMEOUT);
+        hopperFast.configPeakOutputReverse(-1, Constants.Hopper.CONFIG_TIMEOUT);
 
-	}
+        // sets the same configs to hopperSlow
+        hopperSlow.follow(hopperFast);
+    }
 
-	// run hopper inward
-	public void startSpit() {
+    // run hopper inward
+    public void startSpit() {
+        hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.MAX_SPEED);
+        hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.SLOW_SPEED);
+        hopperFloor.set(ControlMode.PercentOutput, Constants.Hopper.FLOOR_SPEED);
+    }
 
-		hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.MAX_SPEED);
-		hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.SLOW_SPEED);
-		hopperFloor.set(ControlMode.PercentOutput, 1.0);
-	}
+    // reverse for anti-jam
+    public void reverseSpit() {
+        hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.REVERSE_SPEED);
+        hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.REVERSE_SPEED);
+    }
 
-	// reverse for anti-jam
-	public void reverseSpit() {
+    // stop hopper movement
+    public void endSpit() {
+        hopperFast.set(ControlMode.PercentOutput, 0);
+        hopperSlow.set(ControlMode.PercentOutput, 0);
+        hopperFloor.set(ControlMode.PercentOutput, 0);
+    }
 
-		hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.REVERSE_SPEED);
-		hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.REVERSE_SPEED);
-
-	}
-
-	// set to zero
-	public void endSpit() {
-
-		hopperFast.set(ControlMode.PercentOutput, 0);
-		hopperSlow.set(ControlMode.PercentOutput, 0);
-		hopperFloor.set(ControlMode.PercentOutput, 0);
-	}
-
-	@Override
-	public void periodic() {	}
+    @Override
+    public void periodic() {
+    }
 }

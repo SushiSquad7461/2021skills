@@ -5,47 +5,52 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
+
 public class Hood extends SubsystemBase {
 
-  
-  CANSparkMaxLowLevel.MotorType brushless = CANSparkMaxLowLevel.MotorType.kBrushless;
-  private CANSparkMax hoodMain;
-  private CANEncoder hoodEncoder;
+    // fields
+    private CANSparkMax hoodMain; // main motor
+    private CANEncoder hoodEncoder; // main motor encoder
 
-  public Hood() {
+    public Hood() {
+        // instantiate neo550 and encoder
+        hoodMain = new CANSparkMax(Constants.Hood.HOOD_MOTOR, Constants.Hood.MOTOR_TYPE);
+        hoodEncoder = hoodMain.getEncoder();
+    }
 
-      // instantiate the neo550 and encoder
-      hoodMain = new CANSparkMax(Constants.Hood.HOOD_MOTOR_ID, brushless);
-      hoodEncoder = new CANEncoder(hoodMain);
-  }
+    // raises the hood, lowers angle of shot
+    public void raiseHood() {
+        hoodMain.set(Constants.Hood.HOOD_MAX_SPEED);
+    }
 
-  // raises the hood, lowers angle of shot
-  public void raiseHood() {
-      hoodMain.set(Constants.Hood.HOOD_MAX_SPEED);
-  }
+    // lowers hood, increases angle of shot
+    public void lowerHood() {
+        hoodMain.set(-Constants.Hood.HOOD_MAX_SPEED);
+    }
 
-  // lowers hood, increases angle of shot
-  public void lowerHood() {
-      hoodMain.set(-Constants.Hood.HOOD_MAX_SPEED);
-  }
+    // stop hood movement
+    public void stopHood() {
+        hoodMain.set(0);
+    }
 
+    protected void useOutput() {
 
-  protected void useOutput() {}
+    }
 
-  protected double getMeasurement() { 
-      return 0.0;
-      //CHANGE
-  }
+    protected double getMeasurement() {
+        return 0.0;
+        //CHANGE
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }

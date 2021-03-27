@@ -26,10 +26,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<>();
-    autoChooser.setDefaultOption("shooting auto", m_robotContainer.getAutonomousCommand());
-    autoChooser.addOption("not shooting", m_robotContainer.getSecondAutoCommand());
-
-    SmartDashboard.putData("auto paths", autoChooser);
+    autoChooser.setDefaultOption("auto", m_robotContainer.getAutonomousCommand());
   }
 
   @Override

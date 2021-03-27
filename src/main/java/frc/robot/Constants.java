@@ -50,13 +50,13 @@ public final class Constants {
         public static final double SETPOINT_CONSTANT = 0.001667; // 100 ms / 1 min
 
         // pid constants
-        public static final double kP = 0.0002;
+        public static final double kP = 1.320007461;
         public static final double kI = 0.000000;
         public static final double kD = 0;
 
-        public static final double kS = 0.633;
-        public static final double kV = 0.00201;
-        public static final double kA = 0.000405;
+        public static final double kS = 0.529;
+        public static final double kV = 0.136;
+        public static final double kA = 0.0306;
         public static final double ERROR_TOLERANCE = 0;
         public static final double SPEED_TOLERANCE = 100;
 
@@ -93,10 +93,10 @@ public final class Constants {
         public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
         public static final double MAX_SPEED = 0.3;
-        public static final double kP = 0.01;
+        public static final double kP = 0.20;
         public static final double kI = 0.0;
-        public static final double kD = 0.0;
-        public static final double SETPOINT = (25.0/360.0) * (332.0/14.0) * 15;
+        public static final double kD = 0.003;
+        public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
     }
 
     // camera

@@ -29,11 +29,11 @@ public class Hood extends SubsystemBase {
         this.hoodMain = new CANSparkMax(Constants.Hood.MOTOR_ID, Constants.Hood.MOTOR_TYPE);
         hoodMain.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.hoodEncoder = this.hoodMain.getEncoder();
-        /*this.hoodController = this.hoodMain.getPIDController();
+        this.hoodController = this.hoodMain.getPIDController();
         this.hoodController.setP(Constants.Hood.kP);
         this.hoodController.setI(Constants.Hood.kI);
         this.hoodController.setD(Constants.Hood.kD);
-        this.hoodController.setReference(Constants.Hood.SETPOINT, ControlType.kPosition);*/
+        this.hoodController.setReference(Constants.Hood.SETPOINT, ControlType.kPosition);
         this.zeroHood();
         
     }
@@ -48,4 +48,7 @@ public class Hood extends SubsystemBase {
         this.hoodEncoder.setPosition(0.0);
     }
 
+    public void setSetpoint( double setpoint) {
+        this.hoodController.setReference(setpoint, ControlType.kPosition);
+    }
 }

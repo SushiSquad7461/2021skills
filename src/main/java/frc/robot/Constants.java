@@ -36,8 +36,8 @@ public final class Constants {
         public static final int SECONDARY_ID = 3;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
 
-        public static final boolean MAIN_INVERTED = false;
-        public static final boolean SECONDARY_INVERTED = true;
+        public static final boolean MAIN_INVERTED = true;
+        public static final boolean SECONDARY_INVERTED = false;
 
         // encoders
         public static final int ENCODER = 60;
@@ -74,7 +74,7 @@ public final class Constants {
         public static final double SLOW_SPEED = -0.2;
         public static final double REVERSE_SPEED = 0.6;
         public static final double FLOOR_SPEED = 1.0;
-
+        public static final int KICKER_ID = 2;
         public static final int CONFIG_TIMEOUT = 30;
         public static final int CURRENT_SPIKE = 70;
     }
@@ -93,12 +93,12 @@ public final class Constants {
         public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
         public static final double MAX_SPEED = 0.3;
-        public static final double kP = 0.20;
+        public static final double kP = 0.25;
         public static final double kI = 0.0;
-        public static final double kD = 0.003;
+        public static final double kD = 0.00;
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
+    
     }
-
     // camera
     public static final class Camera {
 

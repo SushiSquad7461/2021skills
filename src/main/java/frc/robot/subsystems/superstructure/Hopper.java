@@ -23,20 +23,22 @@ public class Hopper extends SubsystemBase {
     private final WPI_TalonSRX hopperFast;
     private final WPI_VictorSPX hopperSlow;
     private final WPI_TalonSRX hopperFloor;
-
+    private final WPI_TalonSRX kicker;
     public Hopper() {
         // instantiate motors
         hopperFast = new WPI_TalonSRX(Constants.Hopper.FAST_ID);
         hopperSlow = new WPI_VictorSPX(Constants.Hopper.SLOW_ID);
         hopperFloor = new WPI_TalonSRX(Constants.Hopper.FLOOR_ID);
-
+        kicker = new WPI_TalonSRX(Constants.Hopper.KICKER_ID);
         // config the peak and the minimum outputs to tell if there was a spike
         // [-1,1] represents [-100%, 100%]
         hopperFast.configNominalOutputForward(0, Constants.Hopper.CONFIG_TIMEOUT);
         hopperFast.configNominalOutputReverse(0, Constants.Hopper.CONFIG_TIMEOUT);
         hopperFast.configPeakOutputForward(1, Constants.Hopper.CONFIG_TIMEOUT);
         hopperFast.configPeakOutputReverse(-1, Constants.Hopper.CONFIG_TIMEOUT);
-
+        kicker.configPeakOutputForward(1, Constants.Hopper.CONFIG_TIMEOUT);
+        kicker.configPeakOutputReverse(-1, Constants.Hopper.CONFIG_TIMEOUT);
+        hopperFloor.setInverted(true);
         // sets the same configs to hopperSlow
         hopperSlow.follow(hopperFast);
     }
@@ -46,6 +48,7 @@ public class Hopper extends SubsystemBase {
         hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.MAX_SPEED);
         hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.SLOW_SPEED);
         hopperFloor.set(ControlMode.PercentOutput, Constants.Hopper.FLOOR_SPEED);
+        kicker.set(ControlMode.PercentOutput, 1.0);
     }
 
     // reverse for anti-jam
@@ -59,6 +62,7 @@ public class Hopper extends SubsystemBase {
         hopperFast.set(ControlMode.PercentOutput, 0);
         hopperSlow.set(ControlMode.PercentOutput, 0);
         hopperFloor.set(ControlMode.PercentOutput, 0);
+        kicker.set(ControlMode.PercentOutput, 0);
     }
 
     @Override

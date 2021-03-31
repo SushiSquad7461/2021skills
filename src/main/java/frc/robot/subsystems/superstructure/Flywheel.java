@@ -42,7 +42,7 @@ public class Flywheel extends PIDSubsystem {
         flywheelSecondary.restoreFactoryDefaults();
         flywheelMain.setInverted(Constants.Flywheel.MAIN_INVERTED);
         flywheelSecondary.setInverted(Constants.Flywheel.SECONDARY_INVERTED);
-        flywheelSecondary.follow(flywheelMain);
+        flywheelSecondary.follow(flywheelMain, true);
 
         // config the peak and nominal outputs ([-1, 1] represents [-100, 100]%)
 		/*flywheelMain.configNominalOutputForward(0, Constants.Flywheel.CONFIG_TIMEOUT);

@@ -61,7 +61,6 @@ public class RobotContainer {
         // set default commands
         s_flywheel.setDefaultCommand(c_shoot);
 
-        s_hood.enable();
 
         s_drive.setDefaultCommand(new RunCommand(
             () -> s_drive.curveDrive(

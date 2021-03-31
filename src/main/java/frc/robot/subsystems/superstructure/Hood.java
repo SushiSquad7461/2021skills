@@ -8,38 +8,40 @@
 package frc.robot.subsystems.superstructure;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Hood extends PIDSubsystem {
+public class Hood extends SubsystemBase {
     private CANSparkMax hoodMain;
     private CANEncoder hoodEncoder;
-
+    private CANPIDController hoodController;
     public Hood() {
-        super(new PIDController(Constants.Hood.kP, Constants.Hood.kI, Constants.Hood.kD));
-
+    
+        SmartDashboard.putNumber("kP", Constants.Hood.kP);
+        SmartDashboard.putNumber("kD", Constants.Hood.kD);
         this.hoodMain = new CANSparkMax(Constants.Hood.MOTOR_ID, Constants.Hood.MOTOR_TYPE);
         hoodMain.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.hoodEncoder = this.hoodMain.getEncoder();
+        /*this.hoodController = this.hoodMain.getPIDController();
+        this.hoodController.setP(Constants.Hood.kP);
+        this.hoodController.setI(Constants.Hood.kI);
+        this.hoodController.setD(Constants.Hood.kD);
+        this.hoodController.setReference(Constants.Hood.SETPOINT, ControlType.kPosition);*/
         this.zeroHood();
-        this.setSetpoint(Constants.Hood.SETPOINT);
-
+        
     }
-
     @Override
-    public void useOutput(double output, double setpoint) {
-        this.hoodMain.set(output);
-        SmartDashboard.putNumber("output", output);
+    public void periodic(){
+        SmartDashboard.putNumber("real output", hoodMain.getAppliedOutput());
         SmartDashboard.putNumber("bruh position", hoodEncoder.getPosition());
-        SmartDashboard.putNumber("bruh set", this.getSetpoint() );
-    }
-
-    @Override
-    public double getMeasurement() {
-        return this.hoodEncoder.getPosition();
+        SmartDashboard.putNumber("bruh set", Constants.Hood.SETPOINT );
     }
 
     public void zeroHood() {

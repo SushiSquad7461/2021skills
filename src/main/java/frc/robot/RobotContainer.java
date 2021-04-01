@@ -25,7 +25,7 @@ import frc.robot.subsystems.superstructure.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import org.photonvision.PhotonCamera;
+import org.photonvision.*;
  
 public class RobotContainer {
 
@@ -41,6 +41,8 @@ public class RobotContainer {
     public final Shoot c_shoot;
     public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
+    
+    public final PhotonCamera camera = new PhotonCamera("MyCamera");
 
     // create joysticks
     public static final XboxController driveController = new XboxController(Constants.OI.DRIVE_CONTROLLER);
@@ -87,6 +89,9 @@ public class RobotContainer {
         new JoystickButton(operatorController, XboxController.Button.kY.value)
             .whenPressed(new RunCommand(s_intake::unVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+        
+        new JoyStickButton(operatorController, XboxController.Button.kB.value)
+            .whenPressed()
     }
 
     public SequentialCommandGroup getAutonomousCommand() {

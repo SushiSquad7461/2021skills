@@ -8,6 +8,8 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.team254.lib.util.InterpolatingDouble;
+import com.team254.lib.util.InterpolatingTreeMap;
 
 public final class Constants {
 
@@ -63,6 +65,7 @@ public final class Constants {
         // timeout value for parameter configs
         public static final int CONFIG_TIMEOUT = 30;
 
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> rpmTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
     }
 
     // hopper
@@ -97,7 +100,8 @@ public final class Constants {
         public static final double kI = 0.0;
         public static final double kD = 0.00;
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
-    
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> angleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+
     }
     // camera
     public static final class Camera {

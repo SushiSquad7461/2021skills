@@ -9,6 +9,8 @@ package frc.robot.subsystems.superstructure;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.team254.lib.util.InterpolatingDouble;
+import com.team254.lib.util.InterpolatingTreeMap;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
@@ -17,11 +19,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.photonvision.*;
 
 public class Hood extends SubsystemBase {
     private CANSparkMax hoodMain;
     private CANEncoder hoodEncoder;
     private CANPIDController hoodController;
+    private InterpolatingTreeMap closeTreeMap;
+    private InterpolatingTreeMap farTreeMap;
+    private PhotonCamera camera;
+
     public Hood() {
     
         SmartDashboard.putNumber("kP", Constants.Hood.kP);
@@ -35,6 +42,7 @@ public class Hood extends SubsystemBase {
         this.hoodController.setD(Constants.Hood.kD);
         this.hoodController.setReference(Constants.Hood.SETPOINT, ControlType.kPosition);
         this.zeroHood();
+        this.camera = new PhotonCamera("myCamera");
         
     }
     @Override
@@ -50,5 +58,15 @@ public class Hood extends SubsystemBase {
 
     public void setSetpoint( double setpoint) {
         this.hoodController.setReference(setpoint, ControlType.kPosition);
+    }
+    
+    public void autoSetpoint() {
+        PhotonPipelineResult result = camera.getLatestResult();
+        if (camera.hasTargets()) {
+            PhotonTrackedTarget target = result.getBestTarget();
+            double distance = target.getCameraToTarget.distance();
+            double setpoint = Constants.Hood.angleTreeMap.get(new InterpolatingDouble(distance)).value;
+            setSetpoint(setpoint);
+        }
     }
 }

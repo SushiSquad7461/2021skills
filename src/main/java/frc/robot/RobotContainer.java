@@ -13,9 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.AutoDrive;
-import frc.robot.commands.AutoShoot;
-import frc.robot.commands.Shoot;
+import frc.robot.commands.*;
 import frc.robot.subsystems.superstructure.*;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.chassis.Drivetrain;
@@ -41,8 +39,9 @@ public class RobotContainer {
     public final Shoot c_shoot;
     public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
+    public final AdjustShooter c_AdjustShooter;
     
-    public final PhotonCamera camera = new PhotonCamera("MyCamera");
+    public final PhotonCamera camera;
 
     // create joysticks
     public static final XboxController driveController = new XboxController(Constants.OI.DRIVE_CONTROLLER);
@@ -55,15 +54,16 @@ public class RobotContainer {
         s_hopper = new Hopper();
         s_intake = new Intake();
         s_hood = new Hood();
+        camera = new PhotonCamera("myCamera");
 
         // commands
         c_shoot = new Shoot(s_flywheel);
         c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
         c_autoDrive = new AutoDrive(s_drive);
+        c_AdjustShooter = new AdjustShooter(s_hood, s_flywheel, camera);
 
         // set default commands
         s_flywheel.setDefaultCommand(c_shoot);
-
 
         s_drive.setDefaultCommand(new RunCommand(
             () -> s_drive.curveDrive(
@@ -76,12 +76,16 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         // run hopper
-        new JoystickButton(operatorController, XboxController.Button.kA.value)
+        new JoystickButton(driveController, XboxController.Button.kA.value)
             .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
             .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
-
+        
+        // This will both enable and adjust the shooter
+        new JoystickButton(operatorController, XboxController.Button.kB.value)
+            .toggleWhenPressed(c_AdjustShooter);
         // intake
-        new JoystickButton(operatorController, XboxController.Button.kA.value)
+        /*
+        new JoystickButton(driveController, XboxController.Button.kA.value)
             .whenPressed(new RunCommand(s_intake::startVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
 
@@ -90,8 +94,7 @@ public class RobotContainer {
             .whenPressed(new RunCommand(s_intake::unVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
         
-        new JoyStickButton(operatorController, XboxController.Button.kB.value)
-            .whenPressed()
+        */
     }
 
     public SequentialCommandGroup getAutonomousCommand() {

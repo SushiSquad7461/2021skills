@@ -59,14 +59,4 @@ public class Hood extends SubsystemBase {
     public void setSetpoint( double setpoint) {
         this.hoodController.setReference(setpoint, ControlType.kPosition);
     }
-    
-    public void autoSetpoint() {
-        PhotonPipelineResult result = camera.getLatestResult();
-        if (camera.hasTargets()) {
-            PhotonTrackedTarget target = result.getBestTarget();
-            double distance = target.getCameraToTarget.distance();
-            double setpoint = Constants.Hood.angleTreeMap.get(new InterpolatingDouble(distance)).value;
-            setSetpoint(setpoint);
-        }
-    }
 }

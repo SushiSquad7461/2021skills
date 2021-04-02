@@ -55,11 +55,11 @@ public class AdjustShooter extends CommandBase {
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 
-        PhotonUtils.calculateDistancdeToTargetMeters(
+        PhotonUtils.calculateDistanceToTargetMeters(
           Constants.Camera.CAMERA_HEIGHT_METERS,
           Constants.Camera.TARGET_HEIGHT_METERS,
           Constants.Camera.CAMERA_PITCH_RADIANS,
-          Units.degreesToRadians(result.getBestTargetr().getPitch())
+          Units.degreesToRadians(result.getBestTarget().getPitch())
         );
 
       InterpolatingDouble id_distance = new InterpolatingDouble(distance);

@@ -25,7 +25,7 @@ public class TurnToTarget extends CommandBase {
     Constants.Vision.kP,
     Constants.Vision.kI,
     Constants.Vision.kD, 
-    new TrapezoidProfile.Constraints(Constants.Vision.MAX_VELOCITY, Constants.Vision.MAX_ACCELERATION);
+    new TrapezoidProfile.Constraints(Constants.Vision.MAX_VELOCITY, Constants.Vision.MAX_ACCELERATION));
   private boolean isFinished = false;
 
   public TurnToTarget(Drivetrain drive, PhotonCamera camera) {
@@ -50,7 +50,7 @@ public class TurnToTarget extends CommandBase {
       double yaw = target.getYaw();
       if (yaw < Constants.Vision.THRESHOLD) {
         double angularVelocity = pid.calculate(yaw, 0);
-        drive.curveDrive(0, angularVelocity, true);
+        s_drive.curveDrive(0, angularVelocity, true);
       } else {
         isFinished = true;
       }
@@ -61,7 +61,7 @@ public class TurnToTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.curveDrive(0, 0, false);
+    s_drive.curveDrive(0, 0, false);
   }
 
   // Returns true when the command should end.

@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,6 +41,7 @@ public class RobotContainer {
     public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
     public final AdjustShooter c_AdjustShooter;
+    public final TurnToTarget c_turnToTarget;
     
     public final PhotonCamera camera;
 
@@ -61,6 +63,7 @@ public class RobotContainer {
         c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
         c_autoDrive = new AutoDrive(s_drive);
         c_AdjustShooter = new AdjustShooter(s_hood, s_flywheel, camera);
+        c_turnToTarget = new TurnToTarget(s_drive, camera);
 
         // set default commands
         s_flywheel.setDefaultCommand(c_shoot);
@@ -83,6 +86,10 @@ public class RobotContainer {
         // This will both enable and adjust the shooter
         new JoystickButton(operatorController, XboxController.Button.kB.value)
             .toggleWhenPressed(c_AdjustShooter);
+        
+        // Turn automagically to target while button is being held
+        new JoystickButton(driveController, XboxController.Button.kY.value)
+            .whenHeld(c_turnToTarget);
         // intake
         /*
         new JoystickButton(driveController, XboxController.Button.kA.value)

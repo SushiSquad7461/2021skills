@@ -12,22 +12,24 @@ import frc.robot.Constants;
 import frc.robot.subsystems.chassis.Drivetrain;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hopper;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+
 import org.photonvision.*;
 
 public class TurnToTarget extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain drive;
+  private final Drivetrain s_drive;
   private final PhotonCamera camera;
-  private final PIDController pid = new PIDController(
+  private final ProfiledPIDController pid = new ProfiledPIDController(
     Constants.Vision.kP,
     Constants.Vision.kI,
-    Constants.Vision.kD);
-  
+    Constants.Vision.kD, 
+    new TrapezoidProfile.Constraints(Constants.Vision.MAX_VELOCITY, Constants.Vision.MAX_ACCELERATION);
   private boolean isFinished = false;
 
   public TurnToTarget(Drivetrain drive, PhotonCamera camera) {
-    this.drive = drive;
+    s_drive = drive;
     this.camera = camera;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);

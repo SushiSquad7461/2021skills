@@ -66,6 +66,11 @@ public final class Constants {
         public static final int CONFIG_TIMEOUT = 30;
 
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> rpmTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        
+        static {
+            rpmTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(5100.7461));
+            rpmTreeMap.put(new InterpolatingDouble(9999999.0), new InterpolatingDouble(5100.7461));
+        }
     }
 
     // hopper
@@ -102,6 +107,20 @@ public final class Constants {
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> angleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
 
+        static {
+            angleTreeMap.put(new InterpolatingDouble(1.82), new InterpolatingDouble(39.92));
+            angleTreeMap.put(new InterpolatingDouble(1.98), new InterpolatingDouble(42.07));
+            angleTreeMap.put(new InterpolatingDouble(2.13), new InterpolatingDouble(43.04));
+            angleTreeMap.put(new InterpolatingDouble(2.28), new InterpolatingDouble(44.8));
+            angleTreeMap.put(new InterpolatingDouble(2.43), new InterpolatingDouble(45.64));
+            angleTreeMap.put(new InterpolatingDouble(2.59), new InterpolatingDouble(47.47));
+            angleTreeMap.put(new InterpolatingDouble(2.74), new InterpolatingDouble(48.23));
+            angleTreeMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(54.57));
+            angleTreeMap.put(new InterpolatingDouble(3.35), new InterpolatingDouble(57.0));
+            angleTreeMap.put(new InterpolatingDouble(3.65), new InterpolatingDouble(60.57));
+            angleTreeMap.put(new InterpolatingDouble(3.96), new InterpolatingDouble(61.5));
+            angleTreeMap.put(new InterpolatingDouble(4.26), new InterpolatingDouble(62.64));
+        }
     }
     // camera
     public static final class Camera {

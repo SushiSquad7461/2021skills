@@ -11,6 +11,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hood;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -26,6 +28,8 @@ public class AdjustShooter extends CommandBase {
   private final Hood m_hood;
   private final Flywheel m_flywheel;
   private final PhotonCamera m_camera;
+  public double hoodSetpoint;
+  public final double setpointIncrement = 0.01;
 
   /**
    * Creates a new ExampleCommand.
@@ -46,13 +50,16 @@ public class AdjustShooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_flywheel.enableFlywheel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     PhotonPipelineResult result = m_camera.getLatestResult();
+    SmartDashboard.putString("We are at line", "60");
     if (result.hasTargets()) {
+      SmartDashboard.putString("Oh geez", "we have reached the inside of the if");
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 
         PhotonUtils.calculateDistanceToTargetMeters(
@@ -63,23 +70,34 @@ public class AdjustShooter extends CommandBase {
         );
 
       InterpolatingDouble id_distance = new InterpolatingDouble(distance);
-      double hoodSetpoint = Constants.Hood.angleTreeMap.get(id_distance).value;
-      double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.get(id_distance).value;
+      //double hoodSetpoint = Constants.Hood.angleTreeMap.get(id_distance).value;
+      //double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.get(id_distance).value;
       
       m_hood.setSetpoint(hoodSetpoint);
-      m_flywheel.setSetpoint(flywheelSetpoint);
     }
+    double flywheelSetpoint = 5100;
+    m_flywheel.setSetpoint(flywheelSetpoint);
+    SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
+    m_hood.setSetpoint(hoodSetpoint);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_flywheel.setSetpoint(0);
+    m_flywheel.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public void increaseSetpoint() {
+    hoodSetpoint += setpointIncrement;
+  }
+
+  public void decreaseSetpoint() {
+    hoodSetpoint -= setpointIncrement;
   }
 }

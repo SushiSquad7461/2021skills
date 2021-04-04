@@ -81,7 +81,7 @@ public class Flywheel extends PIDSubsystem {
     // return current flywheel speed
     @Override
     protected double getMeasurement() {
-        return flywheelMain.get();
+        return flywheelMain.getEncoder().getVelocity();
     }
 
     // check if flywheel is at speed

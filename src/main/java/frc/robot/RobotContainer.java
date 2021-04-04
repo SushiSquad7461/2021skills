@@ -84,8 +84,14 @@ public class RobotContainer {
             .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
         
         // This will both enable and adjust the shooter
-        new JoystickButton(operatorController, XboxController.Button.kB.value)
+        new JoystickButton(driveController, XboxController.Button.kB.value)
             .toggleWhenPressed(c_AdjustShooter);
+        
+        new JoystickButton(driveController, XboxController.Button.kBumperRight.value)
+            .whenPressed(new RunCommand(c_AdjustShooter::increaseSetpoint));
+
+        new JoystickButton(driveController, XboxController.Button.kBumperLeft.value)
+            .whenPressed(new RunCommand(c_AdjustShooter::decreaseSetpoint));
         
         // Turn automagically to target while button is being held
         new JoystickButton(driveController, XboxController.Button.kY.value)

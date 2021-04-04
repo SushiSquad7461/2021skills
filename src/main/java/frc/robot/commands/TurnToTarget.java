@@ -13,6 +13,7 @@ import frc.robot.subsystems.chassis.Drivetrain;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hopper;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 import org.photonvision.*;
@@ -26,6 +27,11 @@ public class TurnToTarget extends CommandBase {
     Constants.Vision.kI,
     Constants.Vision.kD, 
     new TrapezoidProfile.Constraints(Constants.Vision.MAX_VELOCITY, Constants.Vision.MAX_ACCELERATION));
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
+    Constants.Vision.kS,
+    Constants.Vision.kV,
+    Constants.Vision.kA
+  )
   private boolean isFinished = false;
 
   public TurnToTarget(Drivetrain drive, PhotonCamera camera) {
@@ -49,7 +55,9 @@ public class TurnToTarget extends CommandBase {
       PhotonTrackedTarget target = result.getBestTarget();
       double yaw = target.getYaw();
       if (yaw < Constants.Vision.THRESHOLD) {
-        double angularVelocity = pid.calculate(yaw, 0);
+        double angularVelocity = 
+          pid.calculate(yaw, 0) +
+          feedforward.calculate(Constants.Vision.ff_VELOCITY, Constants.Vision.ff_ACCELERATION);
         s_drive.curveDrive(0, angularVelocity, true);
       } else {
         isFinished = true;

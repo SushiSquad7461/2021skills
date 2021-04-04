@@ -141,9 +141,14 @@ public final class Constants {
         public static final double kP = 0.1;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kS = 0;
+        public static final double kV = 0;
+        public static final double kA = 0;
         public static final double THRESHOLD = 0.1;
         public static final double MAX_VELOCITY = 10;
         public static final double MAX_ACCELERATION = 20;
+        public static final double ff_VELOCITY = 1;
+        public static final double ff_ACCELERATION = 1;
     }
 
 }

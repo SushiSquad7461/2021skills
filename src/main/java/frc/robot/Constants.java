@@ -126,9 +126,9 @@ public final class Constants {
     }
     // camera
     public static final class Camera {
-        public static final double CAMERA_HEIGHT_METERS = 0;
-        public static final double TARGET_HEIGHT_METERS = 0;
-        public static final double CAMERA_PITCH_RADIANS = 0;
+        public static final double CAMERA_HEIGHT_METERS = 0.597;
+        public static final double TARGET_HEIGHT_METERS = 2.311;
+        public static final double CAMERA_PITCH_RADIANS = 0.349;
     }
 
     // OI

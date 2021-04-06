@@ -58,6 +58,7 @@ public class AdjustShooter extends CommandBase {
   @Override
   public void execute() {
     PhotonPipelineResult result = m_camera.getLatestResult();
+    SmartDashboard.putBoolean("Has targets", result.hasTargets());
     Logger.log("AdjustShooter.execute: Got latest result");
     if (result.hasTargets()) {
       Logger.log("AdjustShooter.execute: result has targets");
@@ -71,9 +72,10 @@ public class AdjustShooter extends CommandBase {
         );
       InterpolatingDouble id_distance = new InterpolatingDouble(distance);
       SmartDashboard.putNumber("Distance", distance);
-      double hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
+      SmartDashboard.putNumber("Pitch", result.getBestTarget().getPitch());
+      //double hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
       double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.getInterpolated(id_distance).value;
-      m_hood.setSetpoint(hoodSetpoint);
+      //m_hood.setSetpoint(hoodSetpoint);
     }
     double flywheelSetpoint = Constants.Flywheel.RPM;
     //m_flywheel.setSetpoint(flywheelSetpoint);

@@ -64,6 +64,7 @@ public class Logger {
     }
 
     private void logInternal(String key, String messageString) {
+        return;
         // if (!this.shouldLogMessage(messageString)) return;
 
         LogEntry msg = new LogEntry(key, messageString);

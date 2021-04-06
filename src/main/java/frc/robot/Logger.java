@@ -41,7 +41,7 @@ public class Logger {
     private static Logger instance;
 
     private boolean shouldLogMessage(String messageString) {
-        if (this.messages.size() < LOOKBACK_LENGTH) return true;
+        if (this.messages.size() <= LOOKBACK_LENGTH) return true;
         
         for (int i = this.messages.size() - 1 - LOOKBACK_LENGTH;
             i < this.messages.size();

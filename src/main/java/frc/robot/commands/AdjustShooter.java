@@ -59,6 +59,7 @@ public class AdjustShooter extends CommandBase {
   public void execute() {
     PhotonPipelineResult result = m_camera.getLatestResult();
     SmartDashboard.putBoolean("Has targets", result.hasTargets());
+    SmartDashboard.putNumber("Random number", Math.random());
     Logger.log("AdjustShooter.execute: Got latest result");
     if (result.hasTargets()) {
       Logger.log("AdjustShooter.execute: result has targets");

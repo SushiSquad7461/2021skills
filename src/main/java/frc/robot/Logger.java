@@ -65,6 +65,7 @@ public class Logger {
 
     private void logInternal(String key, String messageString) {
         return;
+        /*
         // if (!this.shouldLogMessage(messageString)) return;
 
         LogEntry msg = new LogEntry(key, messageString);
@@ -75,6 +76,7 @@ public class Logger {
 
         SmartDashboard.putString(LOGGER_KEY, sdCurrent + fullMessage + "\n");
         System.out.println(fullMessage);
+        */
     }
 
     public static void log(String key, String messageString) {

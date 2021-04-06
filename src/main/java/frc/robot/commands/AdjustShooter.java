@@ -58,10 +58,8 @@ public class AdjustShooter extends CommandBase {
   @Override
   public void execute() {
     PhotonPipelineResult result = m_camera.getLatestResult();
-    SmartDashboard.putString("We are at line", "60");
     Logger.log("AdjustShooter.execute: Got latest result");
     if (result.hasTargets()) {
-      SmartDashboard.putString("Oh geez", "we have reached the inside of the if");
       Logger.log("AdjustShooter.execute: result has targets");
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 

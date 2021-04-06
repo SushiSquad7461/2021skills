@@ -62,13 +62,9 @@ public class TurnToTarget extends CommandBase {
   @Override
   public void execute() {
     PhotonPipelineResult result = camera.getLatestResult();
-    SmartDashboard.putString("yeet yeet", "poopy");
-    SmartDashboard.putBoolean("has target", result.hasTargets());
-    
     Logger.log("TurnToTarget.execute: got camera latest result. " +
       "has targets? " + result.hasTargets());
     if (result.hasTargets()) {
-      SmartDashboard.putString("yeet yoot", "peepee");
       PhotonTrackedTarget target = result.getBestTarget();
       double yaw = target.getYaw();
       SmartDashboard.putNumber("Yaw", yaw);

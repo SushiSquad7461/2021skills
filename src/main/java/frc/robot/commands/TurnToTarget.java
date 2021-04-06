@@ -12,7 +12,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.chassis.Drivetrain;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hopper;
-import frc.robot.Logger;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -62,8 +61,6 @@ public class TurnToTarget extends CommandBase {
   @Override
   public void execute() {
     PhotonPipelineResult result = camera.getLatestResult();
-    Logger.log("TurnToTarget.execute: got camera latest result. " +
-      "has targets? " + result.hasTargets());
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       double yaw = target.getYaw();

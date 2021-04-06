@@ -76,7 +76,6 @@ public class RobotContainer {
                 driveController.getXButton()), s_drive));
 
         configureButtonBindings();
-        Logger.log("Robot initialized");
     }
 
     private void configureButtonBindings() {

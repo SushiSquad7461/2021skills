@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.Logger;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hood;
@@ -60,9 +59,7 @@ public class AdjustShooter extends CommandBase {
     PhotonPipelineResult result = m_camera.getLatestResult();
     SmartDashboard.putBoolean("Has targets", result.hasTargets());
     SmartDashboard.putNumber("Random number", Math.random());
-    Logger.log("AdjustShooter.execute: Got latest result");
     if (result.hasTargets()) {
-      Logger.log("AdjustShooter.execute: result has targets");
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 
         PhotonUtils.calculateDistanceToTargetMeters(

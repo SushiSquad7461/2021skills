@@ -64,13 +64,13 @@ public class Logger {
     }
 
     private void logInternal(String key, String messageString) {
-        if (!this.shouldLogMessage(messageString)) return;
+        // if (!this.shouldLogMessage(messageString)) return;
 
         LogEntry msg = new LogEntry(key, messageString);
         String fullMessage = msg.toString();
         String sdCurrent = SmartDashboard.getString(LOGGER_KEY, "");
 
-        this.messages.add(msg);
+        //this.messages.add(msg);
 
         SmartDashboard.putString(LOGGER_KEY, sdCurrent + fullMessage + "\n");
         System.out.println(fullMessage);

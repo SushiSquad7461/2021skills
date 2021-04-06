@@ -84,20 +84,26 @@ public class RobotContainer {
         new JoystickButton(driveController, XboxController.Button.kA.value)
             .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
             .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
+
+        new JoystickButton(driveController, XboxController.Button.kY.value)
+            .whenPressed(new RunCommand(s_flywheel::enableFlywheel, s_flywheel))
+            .whenReleased(new RunCommand(s_flywheel::stop, s_flywheel));
         
         // This will both enable and adjust the shooter
         new JoystickButton(driveController, XboxController.Button.kB.value)
             .toggleWhenPressed(c_AdjustShooter);
         
         new JoystickButton(driveController, XboxController.Button.kBumperRight.value)
-            .whenPressed(new RunCommand(c_AdjustShooter::increaseSetpoint));
+            .whenPressed(new InstantCommand(c_AdjustShooter::increaseSetpoint));
 
         new JoystickButton(driveController, XboxController.Button.kBumperLeft.value)
-            .whenPressed(new RunCommand(c_AdjustShooter::decreaseSetpoint));
+            .whenPressed(new InstantCommand(c_AdjustShooter::decreaseSetpoint));
         
         // Turn automagically to target while button is being held
+        /*
         new JoystickButton(driveController, XboxController.Button.kY.value)
             .toggleWhenPressed(c_turnToTarget);
+        */
         // intake
         /*
         new JoystickButton(driveController, XboxController.Button.kA.value)

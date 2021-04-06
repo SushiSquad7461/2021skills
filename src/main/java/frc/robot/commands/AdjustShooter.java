@@ -30,7 +30,7 @@ public class AdjustShooter extends CommandBase {
   private final Flywheel m_flywheel;
   private final PhotonCamera m_camera;
   public double hoodSetpoint;
-  public final double setpointIncrement = 0.01;
+  public final double setpointIncrement = 1;
 
   /**
    * Creates a new ExampleCommand.
@@ -51,7 +51,7 @@ public class AdjustShooter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_flywheel.enableFlywheel();
+    //m_flywheel.enableFlywheel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -73,12 +73,12 @@ public class AdjustShooter extends CommandBase {
       SmartDashboard.putNumber("Distance", distance);
       double hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
       double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.getInterpolated(id_distance).value;
-      //m_hood.setSetpoint(hoodSetpoint);
+      m_hood.setSetpoint(hoodSetpoint);
     }
     double flywheelSetpoint = Constants.Flywheel.RPM;
-    m_flywheel.setSetpoint(flywheelSetpoint);
+    //m_flywheel.setSetpoint(flywheelSetpoint);
     SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
-    //m_hood.setSetpoint(hoodSetpoint);
+    m_hood.setSetpoint(hoodSetpoint);
   }
 
   // Called once the command ends or is interrupted.

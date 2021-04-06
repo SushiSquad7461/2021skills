@@ -39,6 +39,9 @@ public class Flywheel extends PIDSubsystem {
         );
 
         flywheelMain.restoreFactoryDefaults();
+        flywheelMain.setSmartCurrentLimit(Constants.Flywheel.CURRENT_LIMIT);
+        flywheelSecondary.restoreFactoryDefaults();
+        flywheelSecondary.setSmartCurrentLimit(Constants.Flywheel.CURRENT_LIMIT);
         flywheelSecondary.restoreFactoryDefaults();
         flywheelMain.setInverted(Constants.Flywheel.MAIN_INVERTED);
         flywheelSecondary.setInverted(Constants.Flywheel.SECONDARY_INVERTED);
@@ -53,6 +56,7 @@ public class Flywheel extends PIDSubsystem {
 
         // the first number here is a 0 for position tolerance, we want it to be zero
         this.getController().setTolerance(0, Constants.Flywheel.ERROR_TOLERANCE);
+        
     }
 
     public void stop() {
@@ -74,8 +78,10 @@ public class Flywheel extends PIDSubsystem {
         double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
         double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
 
-        //flywheelMain.set(output + feedForward);
-        flywheelMain.set(1.0);
+        flywheelMain.set(output + feedForward);
+        SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
+        SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
+        //flywheelMain.set(1.0);
     }
 
     // return current flywheel speed

@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.Logger;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hood;
@@ -58,8 +59,10 @@ public class AdjustShooter extends CommandBase {
   public void execute() {
     PhotonPipelineResult result = m_camera.getLatestResult();
     SmartDashboard.putString("We are at line", "60");
+    Logger.log("AdjustShooter.execute: Got latest result");
     if (result.hasTargets()) {
       SmartDashboard.putString("Oh geez", "we have reached the inside of the if");
+      Logger.log("AdjustShooter.execute: result has targets");
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 
         PhotonUtils.calculateDistanceToTargetMeters(
@@ -68,17 +71,16 @@ public class AdjustShooter extends CommandBase {
           Constants.Camera.CAMERA_PITCH_RADIANS,
           Units.degreesToRadians(result.getBestTarget().getPitch())
         );
-
       InterpolatingDouble id_distance = new InterpolatingDouble(distance);
-      //double hoodSetpoint = Constants.Hood.angleTreeMap.get(id_distance).value;
-      //double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.get(id_distance).value;
-      
-      m_hood.setSetpoint(hoodSetpoint);
+      SmartDashboard.putNumber("Distance", distance);
+      double hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
+      double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.getInterpolated(id_distance).value;
+      //m_hood.setSetpoint(hoodSetpoint);
     }
-    double flywheelSetpoint = 5100;
+    double flywheelSetpoint = Constants.Flywheel.RPM;
     m_flywheel.setSetpoint(flywheelSetpoint);
     SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
-    m_hood.setSetpoint(hoodSetpoint);
+    //m_hood.setSetpoint(hoodSetpoint);
   }
 
   // Called once the command ends or is interrupted.

@@ -12,8 +12,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.chassis.Drivetrain;
 import frc.robot.subsystems.superstructure.Flywheel;
 import frc.robot.subsystems.superstructure.Hopper;
+import frc.robot.Logger;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 import org.photonvision.*;
@@ -22,16 +26,23 @@ public class TurnToTarget extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain s_drive;
   private final PhotonCamera camera;
+  /*
   private final ProfiledPIDController pid = new ProfiledPIDController(
     Constants.Vision.kP,
     Constants.Vision.kI,
     Constants.Vision.kD, 
     new TrapezoidProfile.Constraints(Constants.Vision.MAX_VELOCITY, Constants.Vision.MAX_ACCELERATION));
+  */
+  private final PIDController pid = new PIDController(
+    Constants.Vision.kP,
+    Constants.Vision.kI,
+    Constants.Vision.kD
+  );
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
     Constants.Vision.kS,
     Constants.Vision.kV,
     Constants.Vision.kA
-  )
+  );
   private boolean isFinished = false;
 
   public TurnToTarget(Drivetrain drive, PhotonCamera camera) {
@@ -51,14 +62,23 @@ public class TurnToTarget extends CommandBase {
   @Override
   public void execute() {
     PhotonPipelineResult result = camera.getLatestResult();
+    SmartDashboard.putString("yeet yeet", "poopy");
+    SmartDashboard.putBoolean("has target", result.hasTargets());
+    
+    Logger.log("TurnToTarget.execute: got camera latest result. " +
+      "has targets? " + result.hasTargets());
     if (result.hasTargets()) {
+      SmartDashboard.putString("yeet yoot", "peepee");
       PhotonTrackedTarget target = result.getBestTarget();
       double yaw = target.getYaw();
-      if (yaw < Constants.Vision.THRESHOLD) {
+      SmartDashboard.putNumber("Yaw", yaw);
+      if (Math.abs(yaw) > Constants.Vision.THRESHOLD) {
+        double PIDOutput = pid.calculate(yaw, 0);
         double angularVelocity = 
           pid.calculate(yaw, 0) +
-          feedforward.calculate(Constants.Vision.ff_VELOCITY, Constants.Vision.ff_ACCELERATION);
-        s_drive.curveDrive(0, angularVelocity, true);
+          feedforward.calculate(PIDOutput, Constants.Vision.ff_ACCELERATION);
+        SmartDashboard.putNumber("angular velocity", angularVelocity);
+        s_drive.curveDrive(0, -angularVelocity, true);
       } else {
         isFinished = true;
       }

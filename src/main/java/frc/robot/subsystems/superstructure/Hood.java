@@ -40,7 +40,6 @@ public class Hood extends SubsystemBase {
         this.hoodController.setP(Constants.Hood.kP);
         this.hoodController.setI(Constants.Hood.kI);
         this.hoodController.setD(Constants.Hood.kD);
-        this.hoodController.setReference(Constants.Hood.SETPOINT, ControlType.kPosition);
         this.zeroHood();
         this.camera = new PhotonCamera("myCamera");
         

@@ -51,6 +51,7 @@ public final class Constants {
         public static final int TICKS_PER_ROTATION = 42; // ticks per one encoder rotation
         public static final double SETPOINT_CONSTANT = 0.001667; // 100 ms / 1 min
 
+        public static final double RPM = 60;
         // pid constants
         public static final double kP = 1.320007461;
         public static final double kI = 0.000000;
@@ -66,6 +67,7 @@ public final class Constants {
         public static final int CONFIG_TIMEOUT = 30;
 
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> rpmTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        public static final int CURRENT_LIMIT = 40;
         
         static {
             rpmTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(5100.7461));
@@ -138,16 +140,16 @@ public final class Constants {
 	}
     
     public static final class Vision {
-        public static final double kP = 0.1;
-        public static final double kI = 0;
-        public static final double kD = 0;
-        public static final double kS = 0;
+        public static final double kP = 0.02;
+        public static final double kI = 0.00;
+        public static final double kD = 0.01;
+        public static final double kS = 0.04; //tuned already
         public static final double kV = 0;
         public static final double kA = 0;
         public static final double THRESHOLD = 0.1;
-        public static final double MAX_VELOCITY = 10;
-        public static final double MAX_ACCELERATION = 20;
-        public static final double ff_VELOCITY = 1;
+        public static final double MAX_VELOCITY = 30;
+        public static final double MAX_ACCELERATION = 10;
+        public static final double ff_VELOCITY = 20;
         public static final double ff_ACCELERATION = 1;
     }
 

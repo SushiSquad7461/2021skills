@@ -30,6 +30,8 @@ public class Hopper extends SubsystemBase {
         hopperSlow = new WPI_VictorSPX(Constants.Hopper.SLOW_ID);
         hopperFloor = new WPI_TalonSRX(Constants.Hopper.FLOOR_ID);
         kicker = new WPI_TalonSRX(Constants.Hopper.KICKER_ID);
+        kicker.configFactoryDefault();
+        kicker.setInverted(true);
         // config the peak and the minimum outputs to tell if there was a spike
         // [-1,1] represents [-100%, 100%]
         hopperFast.configNominalOutputForward(0, Constants.Hopper.CONFIG_TIMEOUT);
@@ -48,7 +50,9 @@ public class Hopper extends SubsystemBase {
         hopperFast.set(ControlMode.PercentOutput, Constants.Hopper.MAX_SPEED);
         hopperSlow.set(ControlMode.PercentOutput, Constants.Hopper.SLOW_SPEED);
         hopperFloor.set(ControlMode.PercentOutput, Constants.Hopper.FLOOR_SPEED);
-        kicker.set(ControlMode.PercentOutput, 1.0);
+        kicker.set(ControlMode.PercentOutput, -1.0);
+        SmartDashboard.putNumber("Kicker applied output", kicker.getMotorOutputPercent());
+        SmartDashboard.putBoolean("Hopper floor inverted", hopperFloor.getInverted());
     }
 
     // reverse for anti-jam

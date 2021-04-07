@@ -75,7 +75,7 @@ public class AdjustShooter extends CommandBase {
       double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.getInterpolated(id_distance).value;
       //m_hood.setSetpoint(hoodSetpoint);
     }
-    double flywheelSetpoint = Constants.Flywheel.RPM;
+    double flywheelSetpoint = Constants.Flywheel.SPEED;
     //m_flywheel.setSetpoint(flywheelSetpoint);
     SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
     m_hood.setSetpoint(hoodSetpoint);

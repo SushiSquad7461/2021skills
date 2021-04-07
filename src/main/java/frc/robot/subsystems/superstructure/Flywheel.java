@@ -67,6 +67,7 @@ public class Flywheel extends PIDSubsystem {
     public void periodic() {
         //this.getController().setSetpoint(Constants.Flywheel.SPEED);
         SmartDashboard.putNumber("flywheel rpm", this.getMeasurement()); // rpm
+        SmartDashboard.putNumber("flywheel rps", this.getMeasurement()/60); // rpm
         SmartDashboard.putBoolean("flywheel at speed", isAtSpeed()); // revved up boolean
     }
 
@@ -75,16 +76,20 @@ public class Flywheel extends PIDSubsystem {
     }
 
     public void enableFlywheel() {
-        double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
-        double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
-
-        flywheelMain.set(Constants.Flywheel.kV * 3000);
+        double controlOutput = m_controller.calculate(this.getMeasurement() / 60, Constants.Flywheel.SPEED);
+        double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED) / 12; 
+        double output = controlOutput + feedForward;
+        flywheelMain.set(output);
         SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
         SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
-        //flywheelMain.set(0.5);
+        //flywheelMain.set(0.05);
+        SmartDashboard.putNumber("Flywheel feedforward", feedForward);
+        SmartDashboard.putNumber("Flywheel control loop output", controlOutput);
+        SmartDashboard.putNumber("Flywheel expected kP", controlOutput / m_controller.getPositionError());
+        SmartDashboard.putNumber("Flywheel position error", m_controller.getPositionError());
     }
 
-    // return current flywheel speed
+    // return current flywheel speed in RPM
     @Override
     protected double getMeasurement() {
         return flywheelMain.getEncoder().getVelocity();

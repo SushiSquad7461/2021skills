@@ -65,7 +65,7 @@ public class Flywheel extends PIDSubsystem {
 
     @Override
     public void periodic() {
-        this.getController().setSetpoint(Constants.Flywheel.SPEED);
+        //this.getController().setSetpoint(Constants.Flywheel.SPEED);
         SmartDashboard.putNumber("flywheel rpm", this.getMeasurement()); // rpm
         SmartDashboard.putBoolean("flywheel at speed", isAtSpeed()); // revved up boolean
     }
@@ -78,10 +78,10 @@ public class Flywheel extends PIDSubsystem {
         double output = m_controller.calculate(this.getMeasurement(), Constants.Flywheel.SPEED);
         double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED);
 
-        flywheelMain.set(output + feedForward);
+        flywheelMain.set(Constants.Flywheel.kV * 3000);
         SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
         SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
-        //flywheelMain.set(1.0);
+        //flywheelMain.set(0.5);
     }
 
     // return current flywheel speed

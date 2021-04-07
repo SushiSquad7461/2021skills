@@ -45,7 +45,7 @@ public final class Constants {
         public static final int ENCODER = 60;
 
         // flywheel speed (rotations per minute)
-        public static final double SPEED = 5100.7461;
+        public static final double SPEED = 3000.7461;
 
         // don't tune these--documentation stated constants for entering rpm
         public static final int TICKS_PER_ROTATION = 42; // ticks per one encoder rotation
@@ -58,7 +58,7 @@ public final class Constants {
         public static final double kD = 0;
 
         public static final double kS = 0.529;
-        public static final double kV = 0.136;
+        public static final double kV = 1.0/5820.0;
         public static final double kA = 0.0306;
         public static final double ERROR_TOLERANCE = 0;
         public static final double SPEED_TOLERANCE = 100;

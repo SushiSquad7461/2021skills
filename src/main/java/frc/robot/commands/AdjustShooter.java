@@ -29,8 +29,9 @@ public class AdjustShooter extends CommandBase {
   private final Flywheel m_flywheel;
   private final PhotonCamera m_camera;
   public double hoodSetpoint;
+  public double flywheelSetpoint;
   public final double setpointIncrement = 1;
-
+  private int setpointIndex = 0;
   /**
    * Creates a new ExampleCommand.
    *
@@ -56,33 +57,13 @@ public class AdjustShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    PhotonPipelineResult result = m_camera.getLatestResult();
-    SmartDashboard.putBoolean("Has targets", result.hasTargets());
-    SmartDashboard.putNumber("Random number", Math.random());
-    double flywheelSetpoint;
-    if (result.hasTargets()) {
-      PhotonTrackedTarget target = result.getBestTarget();
-      double distance = 
-        PhotonUtils.calculateDistanceToTargetMeters(
-          Constants.Camera.CAMERA_HEIGHT_METERS,
-          Constants.Camera.TARGET_HEIGHT_METERS,
-          Constants.Camera.CAMERA_PITCH_RADIANS,
-          Units.degreesToRadians(result.getBestTarget().getPitch())
-        );
-      InterpolatingDouble id_distance = new InterpolatingDouble(distance);
-      SmartDashboard.putNumber("Distance", distance);
-      SmartDashboard.putNumber("Pitch", result.getBestTarget().getPitch());
-      hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
-      flywheelSetpoint = Constants.Flywheel.flywheelTreeMap.getInterpolated(id_distance).value;
-    } else { // green zone
-      hoodSetpoint = Constants.Hood.GREEN_ZONE_SETPOINT;
-      flywheelSetpoint = Constants.Flywheel.GREEN_ZONE_SETPOINT;
-      
-    }
-    m_hood.setSetpoint(hoodSetpoint);
-    m_flywheel.setSetpoint(flywheelSetpoint);
+    refreshSetpoints();
     SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
+    SmartDashboard.putNumber("Flywheel setpoint right here", flywheelSetpoint);
+    m_flywheel.setpoint = flywheelSetpoint;
     m_flywheel.enableFlywheel();
+    m_hood.setSetpoint(hoodSetpoint);
+    SmartDashboard.putNumber("Current zone", setpointIndex);
   }
 
   // Called once the command ends or is interrupted.
@@ -97,11 +78,20 @@ public class AdjustShooter extends CommandBase {
     return false;
   }
 
-  public void increaseSetpoint() {
-    hoodSetpoint += setpointIncrement;
+  public void cycleSetpoints() { 
+    setpointIndex++;
+    if (setpointIndex >= Constants.Hood.ZONE_SETPOINTS.length) {
+      setpointIndex = 0;
+    }
   }
-
-  public void decreaseSetpoint() {
-    hoodSetpoint -= setpointIncrement;
+  public void unCycleSetpoints() { 
+    setpointIndex--;
+    if (setpointIndex < 0) {
+      setpointIndex = Constants.Hood.ZONE_SETPOINTS.length-1;
+    }
+  }
+  private void refreshSetpoints() {
+    hoodSetpoint = Constants.Hood.ZONE_SETPOINTS[setpointIndex];
+    flywheelSetpoint = Constants.Flywheel.ZONE_SETPOINTS[setpointIndex];
   }
 }

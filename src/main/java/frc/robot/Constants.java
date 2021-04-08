@@ -66,7 +66,7 @@ public final class Constants {
 
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> flywheelTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
         public static final int CURRENT_LIMIT = 40;
-        public static final double GREEN_ZONE_SETPOINT = 50;
+        public static final double[] ZONE_SETPOINTS = {50.0, 66.0, 50.0, 50.0};
         
         static {
             flywheelTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(66.7461));
@@ -101,7 +101,7 @@ public final class Constants {
         public static final int SOLENOID_IN = 0;
         public static final int SOLENOID_OUT = 1;
     }
-
+ 
     public static final class Hood {
         public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -111,7 +111,7 @@ public final class Constants {
         public static final double kD = 0.00;
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> angleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
-        public static final double GREEN_ZONE_SETPOINT = 37; // vision can't see the target in the green zone
+        public static final double[] ZONE_SETPOINTS = {37.0, 56.0, 80.0, 80.0};
 
         static {
             angleTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(56.0));

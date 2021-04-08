@@ -95,10 +95,11 @@ public class RobotContainer {
             .toggleWhenPressed(c_AdjustShooter); // yes, both are supposed to be kB
         
         new JoystickButton(driveController, XboxController.Button.kBumperRight.value)
-            .whenPressed(new InstantCommand(c_AdjustShooter::increaseSetpoint));
+            .whenPressed(new InstantCommand(c_AdjustShooter::cycleSetpoints));
 
         new JoystickButton(driveController, XboxController.Button.kBumperLeft.value)
-            .whenPressed(new InstantCommand(c_AdjustShooter::decreaseSetpoint));
+            .whenPressed(new InstantCommand(c_AdjustShooter::unCycleSetpoints));
+
         
         // Turn automagically to target while button is being held
         new JoystickButton(driveController, XboxController.Button.kY.value)

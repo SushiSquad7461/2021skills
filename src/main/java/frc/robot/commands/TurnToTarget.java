@@ -64,7 +64,7 @@ public class TurnToTarget extends CommandBase {
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       double yaw = target.getYaw();
-      SmartDashboard.putNumber("Yaw", yaw);
+      SmartDashboard.putNumber("Yaw asdf", yaw);
       if (Math.abs(yaw) > Constants.Vision.THRESHOLD) {
         double PIDOutput = pid.calculate(yaw, 0);
         double angularVelocity = 

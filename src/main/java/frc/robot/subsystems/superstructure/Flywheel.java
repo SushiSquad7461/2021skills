@@ -25,6 +25,7 @@ public class Flywheel extends PIDSubsystem {
     private final CANSparkMax flywheelMain;
     private final CANSparkMax flywheelSecondary;
     private final SimpleMotorFeedforward flywheelFeedforward;
+    private double setpoint = 50.7461; // rps
 
     public Flywheel() {
         super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
@@ -76,8 +77,8 @@ public class Flywheel extends PIDSubsystem {
     }
 
     public void enableFlywheel() {
-        double controlOutput = m_controller.calculate(this.getMeasurement() / 60, Constants.Flywheel.SPEED);
-        double feedForward = flywheelFeedforward.calculate(Constants.Flywheel.SPEED) / 12; 
+        double controlOutput = m_controller.calculate(this.getMeasurement() / 60, this.setpoint);
+        double feedForward = flywheelFeedforward.calculate(this.setpoint) / 12; 
         double output = controlOutput + feedForward;
         flywheelMain.set(output);
         SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
@@ -97,7 +98,11 @@ public class Flywheel extends PIDSubsystem {
 
     // check if flywheel is at speed
     public boolean isAtSpeed() {
-        return this.getMeasurement() >= Constants.Flywheel.SPEED - Constants.Flywheel.SPEED_TOLERANCE;
+        return this.getMeasurement() >= setpoint - Constants.Flywheel.SPEED_TOLERANCE;
+    }
+    
+    public void setSetpoint(int setpoint) { // sets setpoint in RPS
+        this.setpoint = setpoint;
     }
 
 }

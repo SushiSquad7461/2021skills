@@ -59,6 +59,7 @@ public class AdjustShooter extends CommandBase {
     PhotonPipelineResult result = m_camera.getLatestResult();
     SmartDashboard.putBoolean("Has targets", result.hasTargets());
     SmartDashboard.putNumber("Random number", Math.random());
+    double flywheelSetpoint;
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
       double distance = 
@@ -71,14 +72,17 @@ public class AdjustShooter extends CommandBase {
       InterpolatingDouble id_distance = new InterpolatingDouble(distance);
       SmartDashboard.putNumber("Distance", distance);
       SmartDashboard.putNumber("Pitch", result.getBestTarget().getPitch());
-      //double hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
-      double flywheelSetpoint = Constants.Flywheel.rpmTreeMap.getInterpolated(id_distance).value;
-      //m_hood.setSetpoint(hoodSetpoint);
+      hoodSetpoint = Constants.Hood.angleTreeMap.getInterpolated(id_distance).value;
+      flywheelSetpoint = Constants.Flywheel.flywheelTreeMap.getInterpolated(id_distance).value;
+    } else { // green zone
+      hoodSetpoint = Constants.Hood.GREEN_ZONE_SETPOINT;
+      flywheelSetpoint = Constants.Flywheel.GREEN_ZONE_SETPOINT;
+      
     }
-    double flywheelSetpoint = Constants.Flywheel.SPEED;
-    //m_flywheel.setSetpoint(flywheelSetpoint);
-    SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
     m_hood.setSetpoint(hoodSetpoint);
+    m_flywheel.setSetpoint(flywheelSetpoint);
+    SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
+    m_flywheel.enableFlywheel();
   }
 
   // Called once the command ends or is interrupted.

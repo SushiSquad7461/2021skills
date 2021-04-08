@@ -45,7 +45,6 @@ public final class Constants {
         public static final int ENCODER = 60;
 
         // flywheel speed (rotations per second)
-        public static final double SPEED = 50.0007461;
 
         // don't tune these--documentation stated constants for entering rpm
         public static final int TICKS_PER_ROTATION = 42; // ticks per one encoder rotation
@@ -65,13 +64,18 @@ public final class Constants {
         // timeout value for parameter configs
         public static final int CONFIG_TIMEOUT = 30;
 
-        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> rpmTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> flywheelTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
         public static final int CURRENT_LIMIT = 40;
+        public static final double GREEN_ZONE_SETPOINT = 50;
         
         static {
-            rpmTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(5100.7461));
-            rpmTreeMap.put(new InterpolatingDouble(9999999.0), new InterpolatingDouble(5100.7461));
+            flywheelTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(66.7461));
+            flywheelTreeMap.put(new InterpolatingDouble(1.85), new InterpolatingDouble(66.7461));
+            flywheelTreeMap.put(new InterpolatingDouble(2.944), new InterpolatingDouble(50.0));
+            flywheelTreeMap.put(new InterpolatingDouble(746169420.0), new InterpolatingDouble(50.0));
         }
+        
+
     }
 
     // hopper
@@ -82,7 +86,7 @@ public final class Constants {
         public static final double MAX_SPEED = -0.6;
         public static final double SLOW_SPEED = -0.2;
         public static final double REVERSE_SPEED = 0.6;
-        public static final double FLOOR_SPEED = 1.0;
+        public static final double FLOOR_SPEED = 0.7;
         public static final int KICKER_ID = 2;
         public static final int CONFIG_TIMEOUT = 30;
         public static final int CURRENT_SPIKE = 70;
@@ -107,20 +111,14 @@ public final class Constants {
         public static final double kD = 0.00;
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> angleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        public static final double GREEN_ZONE_SETPOINT = 37; // vision can't see the target in the green zone
 
         static {
-            angleTreeMap.put(new InterpolatingDouble(1.82), new InterpolatingDouble(39.92));
-            angleTreeMap.put(new InterpolatingDouble(1.98), new InterpolatingDouble(42.07));
-            angleTreeMap.put(new InterpolatingDouble(2.13), new InterpolatingDouble(43.04));
-            angleTreeMap.put(new InterpolatingDouble(2.28), new InterpolatingDouble(44.8));
-            angleTreeMap.put(new InterpolatingDouble(2.43), new InterpolatingDouble(45.64));
-            angleTreeMap.put(new InterpolatingDouble(2.59), new InterpolatingDouble(47.47));
-            angleTreeMap.put(new InterpolatingDouble(2.74), new InterpolatingDouble(48.23));
-            angleTreeMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(54.57));
-            angleTreeMap.put(new InterpolatingDouble(3.35), new InterpolatingDouble(57.0));
-            angleTreeMap.put(new InterpolatingDouble(3.65), new InterpolatingDouble(60.57));
-            angleTreeMap.put(new InterpolatingDouble(3.96), new InterpolatingDouble(61.5));
-            angleTreeMap.put(new InterpolatingDouble(4.26), new InterpolatingDouble(62.64));
+            angleTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(56.0));
+            angleTreeMap.put(new InterpolatingDouble(1.85), new InterpolatingDouble(56.0));
+            angleTreeMap.put(new InterpolatingDouble(2.4), new InterpolatingDouble(80.0));
+            angleTreeMap.put(new InterpolatingDouble(2.94), new InterpolatingDouble(80.0));
+            angleTreeMap.put(new InterpolatingDouble(999999.9), new InterpolatingDouble(80.0));
         }
     }
     // camera
@@ -139,7 +137,7 @@ public final class Constants {
 	}
     
     public static final class Vision {
-        public static final double kP = 0.02;
+        public static final double kP = 0.01;
         public static final double kI = 0.00;
         public static final double kD = 0.01;
         public static final double kS = 0.04; //tuned already

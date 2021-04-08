@@ -37,6 +37,7 @@ public class Hood extends SubsystemBase {
         hoodMain.setIdleMode(CANSparkMax.IdleMode.kCoast);
         this.hoodEncoder = this.hoodMain.getEncoder();
         this.hoodController = this.hoodMain.getPIDController();
+        this.hoodController.setOutputRange(-Constants.Hood.MAX_SPEED, Constants.Hood.MAX_SPEED);
         this.hoodController.setP(Constants.Hood.kP);
         this.hoodController.setI(Constants.Hood.kI);
         this.hoodController.setD(Constants.Hood.kD);
@@ -46,17 +47,17 @@ public class Hood extends SubsystemBase {
         
     }
     @Override
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putNumber("real output", hoodMain.getAppliedOutput());
         SmartDashboard.putNumber("bruh position", hoodEncoder.getPosition());
-        SmartDashboard.putNumber("bruh set", Constants.Hood.SETPOINT );
+        SmartDashboard.putNumber("bruh set", Constants.Hood.SETPOINT);
     }
 
     public void zeroHood() {
-        this.hoodEncoder.setPosition(0.0);
+        this.hoodEncoder.setPosition(Constants.Hood.INITIAL_SETPOIONT);
     }
 
-    public void setSetpoint( double setpoint) {
+    public void setSetpoint(double setpoint) {
         this.hoodController.setReference(setpoint, ControlType.kPosition);
     }
 }

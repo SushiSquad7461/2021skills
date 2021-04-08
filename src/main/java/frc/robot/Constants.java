@@ -105,6 +105,7 @@ public final class Constants {
     public static final class Hood {
         public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
+        public static final double INITIAL_SETPOIONT = 80.0;
         public static final double MAX_SPEED = 0.3;
         public static final double kP = 0.1;
         public static final double kI = 0.0;

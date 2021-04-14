@@ -66,7 +66,7 @@ public final class Constants {
 
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> flywheelTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
         public static final int CURRENT_LIMIT = 40;
-        public static final double[] ZONE_SETPOINTS = {50.0, 66.0, 50.0, 50.0};
+        public static final double[] ZONE_SETPOINTS = {50.0, 66.0, 60.0, 60.0};
         
         static {
             flywheelTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(66.7461));

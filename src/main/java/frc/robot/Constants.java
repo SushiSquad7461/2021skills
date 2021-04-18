@@ -49,6 +49,9 @@ public final class Constants {
         // don't tune these--documentation stated constants for entering rpm
         public static final int TICKS_PER_ROTATION = 42; // ticks per one encoder rotation
         public static final double SETPOINT_CONSTANT = 0.001667; // 100 ms / 1 min
+        
+        public static final double MAX_ACCELERATION = 0;
+        public static final double MAX_JERK = 0; // I feel like there's a joke I could make here
 
         // pid constants
         public static final double kP = 0.07461;

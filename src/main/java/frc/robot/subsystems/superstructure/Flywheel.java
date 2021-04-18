@@ -12,14 +12,15 @@ import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.CANCoder;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.*;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMaxLowLevel;
 
-public class Flywheel extends PIDSubsystem {
+public class Flywheel extends ProfiledPIDSubsystem {
 
     // fields
     private final CANSparkMax flywheelMain;
@@ -28,7 +29,14 @@ public class Flywheel extends PIDSubsystem {
     public double setpoint = 50.7461; // rps
 
     public Flywheel() {
-        super(new PIDController(Constants.Flywheel.kP, Constants.Flywheel.kI, Constants.Flywheel.kD));
+        super(new ProfiledPIDController(
+            Constants.Flywheel.kP,
+            Constants.Flywheel.kI,
+            Constants.Flywheel.kD,
+            new Constraints(
+                Constants.Flywheel.MAX_ACCELERATION,
+                Constants.Flywheel.MAX_JERK
+            )));
 
         // instantiate and configure motors
         flywheelMain = new CANSparkMax(Constants.Flywheel.MAIN_ID, Constants.Flywheel.MOTOR_TYPE);
@@ -73,7 +81,19 @@ public class Flywheel extends PIDSubsystem {
     }
 
     @Override
-    protected void useOutput(double output, double setpoint) {
+    protected void useOutput(double output, State setpoint) {
+        double feedForward = flywheelFeedforward.calculate(setpoint.position, setpoint.velocity) / 12; 
+        double controlOutput = output + feedForward;
+        flywheelMain.set(output);
+        SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
+        SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
+        //flywheelMain.set(0.05);
+        SmartDashboard.putNumber("Flywheel feedforward", feedForward);
+        SmartDashboard.putNumber("Flywheel control loop output", controlOutput);
+        SmartDashboard.putNumber("Flywheel expected kP", controlOutput / m_controller.getPositionError());
+        SmartDashboard.putNumber("Flywheel position error", m_controller.getPositionError());
+        SmartDashboard.putNumber("flywheeeel set", setpoint);
+
     }
 
     public void enableFlywheel() {

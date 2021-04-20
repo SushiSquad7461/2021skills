@@ -38,8 +38,6 @@ public class RobotContainer {
     public final Hood s_hood;
 
     // initialize commands
-    public final Shoot c_shoot;
-    public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
     public final AdjustShooter c_AdjustShooter;
     public final TurnToTarget c_turnToTarget;
@@ -60,14 +58,9 @@ public class RobotContainer {
         camera = new PhotonCamera("myCamera");
 
         // commands
-        c_shoot = new Shoot(s_flywheel);
-        c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
         c_autoDrive = new AutoDrive(s_drive);
         c_AdjustShooter = new AdjustShooter(s_hood, s_flywheel, camera);
         c_turnToTarget = new TurnToTarget(s_drive, camera);
-
-        // set default commands
-        s_flywheel.setDefaultCommand(c_shoot);
 
         s_drive.setDefaultCommand(new RunCommand(
             () -> s_drive.curveDrive(

@@ -17,31 +17,32 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMaxLowLevel;
 
-public class Flywheel extends ProfiledPIDSubsystem {
+public class Flywheel extends SubsystemBase {
 
     // fields
     private final CANSparkMax flywheelMain;
     private final CANSparkMax flywheelSecondary;
-    private final SimpleMotorFeedforward flywheelFeedforward;
-    public double setpoint = 50.7461; // rps
+    private final SimpleMotorFeedforward feedforward;
+    private final ProfiledPIDController controller;
 
     public Flywheel() {
-        super(new ProfiledPIDController(
+        controller = new ProfiledPIDController(
             Constants.Flywheel.kP,
             Constants.Flywheel.kI,
             Constants.Flywheel.kD,
             new Constraints(
                 Constants.Flywheel.MAX_ACCELERATION,
-                Constants.Flywheel.MAX_JERK
-            )));
+                Constants.Flywheel.MAX_JERK // I max jerked your mom
+            ));
 
         // instantiate and configure motors
         flywheelMain = new CANSparkMax(Constants.Flywheel.MAIN_ID, Constants.Flywheel.MOTOR_TYPE);
         flywheelSecondary = new CANSparkMax(Constants.Flywheel.SECONDARY_ID, Constants.Flywheel.MOTOR_TYPE);
-        flywheelFeedforward = new SimpleMotorFeedforward(
+        feedforward = new SimpleMotorFeedforward(
                 Constants.Flywheel.kS,
                 Constants.Flywheel.kV,
                 Constants.Flywheel.kA
@@ -64,12 +65,8 @@ public class Flywheel extends ProfiledPIDSubsystem {
 		pretty sure this doesn't exist either, although i'm not quite sure what it did anyways */
 
         // the first number here is a 0 for position tolerance, we want it to be zero
-        this.getController().setTolerance(0, Constants.Flywheel.ERROR_TOLERANCE);
+        controller.setTolerance(0, Constants.Flywheel.ERROR_TOLERANCE);
         
-    }
-
-    public void stop() {
-        flywheelMain.set(0);
     }
 
     @Override
@@ -77,54 +74,20 @@ public class Flywheel extends ProfiledPIDSubsystem {
         //this.getController().setSetpoint(Constants.Flywheel.SPEED);
         SmartDashboard.putNumber("flywheel rpm", this.getMeasurement()); // rpm
         SmartDashboard.putNumber("flywheel rps", this.getMeasurement()/60); // rpm
-        SmartDashboard.putBoolean("flywheel at speed", isAtSpeed()); // revved up boolean
+        double velocity = flywheelMain.getEncoder().getVelocity();
+        flywheelMain.set(controller.calculate(velocity) + feedforward.calculate(velocity));
     }
-
-    @Override
-    protected void useOutput(double output, State setpoint) {
-        double feedForward = flywheelFeedforward.calculate(setpoint.position, setpoint.velocity) / 12; 
-        double controlOutput = output + feedForward;
-        flywheelMain.set(output);
-        SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
-        SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
-        //flywheelMain.set(0.05);
-        SmartDashboard.putNumber("Flywheel feedforward", feedForward);
-        SmartDashboard.putNumber("Flywheel control loop output", controlOutput);
-        SmartDashboard.putNumber("Flywheel expected kP", controlOutput / m_controller.getPositionError());
-        SmartDashboard.putNumber("Flywheel position error", m_controller.getPositionError());
-        SmartDashboard.putNumber("flywheeeel set", setpoint);
-
-    }
-
-    public void enableFlywheel() {
-        double controlOutput = m_controller.calculate(this.getMeasurement() / 60, this.setpoint);
-        double feedForward = flywheelFeedforward.calculate(this.setpoint) / 12; 
-        double output = controlOutput + feedForward;
-        flywheelMain.set(output);
-        SmartDashboard.putNumber("Flywheel primary current", flywheelMain.getOutputCurrent());
-        SmartDashboard.putNumber("Flywheel secondary current", flywheelSecondary.getOutputCurrent());
-        //flywheelMain.set(0.05);
-        SmartDashboard.putNumber("Flywheel feedforward", feedForward);
-        SmartDashboard.putNumber("Flywheel control loop output", controlOutput);
-        SmartDashboard.putNumber("Flywheel expected kP", controlOutput / m_controller.getPositionError());
-        SmartDashboard.putNumber("Flywheel position error", m_controller.getPositionError());
-        SmartDashboard.putNumber("flywheeeel set", setpoint);
-    }
-
     // return current flywheel speed in RPM
-    @Override
     protected double getMeasurement() {
         return flywheelMain.getEncoder().getVelocity();
     }
-
-    // check if flywheel is at speed
-    public boolean isAtSpeed() {
-        return this.getMeasurement() >= setpoint - Constants.Flywheel.SPEED_TOLERANCE;
+    
+    public void setGoal(double goal) {
+        controller.setGoal(goal);
     }
     
-    public void setSetpoint(int newSetpoint) { // sets setpoint in RPS
-        SmartDashboard.putNumber("Changing flywheel setpoint", newSetpoint);
-        this.setpoint = newSetpoint;
+    public void stop() {
+        controller.setGoal(0);
     }
-
+    
 }

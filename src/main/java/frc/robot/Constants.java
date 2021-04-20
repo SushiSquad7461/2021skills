@@ -54,6 +54,7 @@ public final class Constants {
 
         // pid constants
         public static final double kP = 0.07461;
+        //public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
 

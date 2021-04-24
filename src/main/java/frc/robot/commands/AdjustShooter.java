@@ -28,7 +28,7 @@ public class AdjustShooter extends CommandBase {
   private final Hood m_hood;
   private final Flywheel m_flywheel;
   private final PhotonCamera m_camera;
-  public double hoodSetpoint;
+  public double hoodSetpoint = Constants.Hood.INITIAL_SETPOIONT;
   public double flywheelSetpoint = 60;
   public final double setpointIncrement = 1;
   private int setpointIndex = 0;

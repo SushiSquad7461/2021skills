@@ -50,7 +50,6 @@ public class Hood extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("real output", hoodMain.getAppliedOutput());
         SmartDashboard.putNumber("bruh position", hoodEncoder.getPosition());
-        SmartDashboard.putNumber("bruh set", Constants.Hood.SETPOINT);
     }
 
     public void zeroHood() {

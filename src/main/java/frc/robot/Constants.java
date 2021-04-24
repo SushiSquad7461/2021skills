@@ -53,8 +53,8 @@ public final class Constants {
         public static final double MAX_JERK = 30; //rps^3
 
         // pid constants
-        public static final double kP = 0.07461;
-        //public static final double kP = 0;
+        //public static final double kP = 0.07461;
+        public static final double kP = 0.03;
         public static final double kI = 0;
         public static final double kD = 0;
 

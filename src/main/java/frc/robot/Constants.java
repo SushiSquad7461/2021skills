@@ -108,21 +108,35 @@ public final class Constants {
     public static final class Hood {
         public static final int MOTOR_ID = 12;
         public static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE = CANSparkMaxLowLevel.MotorType.kBrushless;
-        public static final double INITIAL_SETPOIONT = 80.0;
+        public static final double INITIAL_SETPOINT = 80.0;
         public static final double MAX_SPEED = 0.3;
         public static final double kP = 0.1;
         public static final double kI = 0.0;
         public static final double kD = 0.00;
         public static final double SETPOINT = (45.0/360.0) * (332.0/14.0) * 15;
-        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> angleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> hoodAngleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
         public static final double[] ZONE_SETPOINTS = {37.0, 56.0, 80.0, 80.0};
 
         static {
-            angleTreeMap.put(new InterpolatingDouble(0.0), new InterpolatingDouble(56.0));
-            angleTreeMap.put(new InterpolatingDouble(1.85), new InterpolatingDouble(56.0));
-            angleTreeMap.put(new InterpolatingDouble(2.4), new InterpolatingDouble(80.0));
-            angleTreeMap.put(new InterpolatingDouble(2.94), new InterpolatingDouble(80.0));
-            angleTreeMap.put(new InterpolatingDouble(999999.9), new InterpolatingDouble(80.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(50.0), new InterpolatingDouble(39.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(60.0), new InterpolatingDouble(41.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(70.0), new InterpolatingDouble(45.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(80.0), new InterpolatingDouble(49.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(90.0), new InterpolatingDouble(52.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(100.0), new InterpolatingDouble(54.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(110.0), new InterpolatingDouble(56.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(120.0), new InterpolatingDouble(57.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(130.0), new InterpolatingDouble(58.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(140.0), new InterpolatingDouble(59.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(150.0), new InterpolatingDouble(62.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(160.0), new InterpolatingDouble(64.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(170.0), new InterpolatingDouble(65.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(180.0), new InterpolatingDouble(65.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(190.0), new InterpolatingDouble(65.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(200.0), new InterpolatingDouble(66.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(210.0), new InterpolatingDouble(65.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(220.0), new InterpolatingDouble(66.0));
+            hoodAngleTreeMap.put(new InterpolatingDouble(230.0), new InterpolatingDouble(67.0));
         }
     }
     // camera
@@ -130,6 +144,23 @@ public final class Constants {
         public static final double CAMERA_HEIGHT_METERS = 0.597;
         public static final double TARGET_HEIGHT_METERS = 2.311;
         public static final double CAMERA_PITCH_RADIANS = 0.349;
+        // Interpolates between the pitch of the target on the camera and the distance
+        // the robot is from the target
+        public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> cameraAngleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
+        
+        // Units are in degrees and inches
+        static {
+            cameraAngleTreeMap.put(new InterpolatingDouble(24.3), new InterpolatingDouble(40.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(17.0), new InterpolatingDouble(58.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(14.0), new InterpolatingDouble(66.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(8.7), new InterpolatingDouble(80.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(0.1), new InterpolatingDouble(108.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(-4.3), new InterpolatingDouble(128.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(-11.6), new InterpolatingDouble(184.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(-14.4), new InterpolatingDouble(207.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(-15.0), new InterpolatingDouble(224.0));
+            cameraAngleTreeMap.put(new InterpolatingDouble(-17.1), new InterpolatingDouble(249.0));
+        }
     }
 
     // OI

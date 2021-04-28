@@ -28,7 +28,7 @@ public class AdjustShooter extends CommandBase {
   private final Hood m_hood;
   private final Flywheel m_flywheel;
   private final PhotonCamera m_camera;
-  public double hoodSetpoint = Constants.Hood.INITIAL_SETPOIONT;
+  public double hoodSetpoint = Constants.Hood.INITIAL_SETPOINT;
   public double flywheelSetpoint = 60;
   public final double setpointIncrement = 1;
   private int setpointIndex = 0;
@@ -78,14 +78,18 @@ public class AdjustShooter extends CommandBase {
   }
 
   public void cycleSetpoints() { 
-    hoodSetpoint += 1.0;
+    if (hoodSetpoint < Constants.Hood.INITIAL_SETPOINT) {
+      hoodSetpoint += 1.0;
+    }
     /*setpointIndex++;
     if (setpointIndex >= Constants.Hood.ZONE_SETPOINTS.length) {
       setpointIndex = 0;
     }*/
   }
   public void unCycleSetpoints() { 
-    hoodSetpoint -= 1.0;
+    if (hoodSetpoint > 0) {
+      hoodSetpoint -= 1.0;
+    }
     /*setpointIndex--;
     if (setpointIndex < 0) {
       setpointIndex = Constants.Hood.ZONE_SETPOINTS.length-1;

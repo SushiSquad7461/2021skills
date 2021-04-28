@@ -53,7 +53,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void zeroHood() {
-        this.hoodEncoder.setPosition(Constants.Hood.INITIAL_SETPOIONT);
+        this.hoodEncoder.setPosition(Constants.Hood.INITIAL_SETPOINT);
     }
 
     public void setSetpoint(double setpoint) {

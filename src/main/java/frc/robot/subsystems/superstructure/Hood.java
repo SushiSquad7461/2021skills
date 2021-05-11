@@ -59,4 +59,5 @@ public class Hood extends SubsystemBase {
     public void setSetpoint(double setpoint) {
         this.hoodController.setReference(setpoint, ControlType.kPosition);
     }
+    
 }

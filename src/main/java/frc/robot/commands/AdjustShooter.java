@@ -60,11 +60,37 @@ public class AdjustShooter extends CommandBase {
     //refreshSetpoints();
     SmartDashboard.putNumber("Hood setpoint", hoodSetpoint);
     SmartDashboard.putNumber("Flywheel setpoint right here", flywheelSetpoint);
-    m_hood.setSetpoint(hoodSetpoint);
+    double setpoint = getHoodSetpointFromCamera();
+    if (setpoint != -1) {
+      m_hood.setSetpoint(setpoint);
+    }
     m_flywheel.setGoal(flywheelSetpoint);
+    //m_flywheel.setGoal(0);
     SmartDashboard.putNumber("Current zone", setpointIndex);
   }
+  
+  // Returns -1 if it doesn't see the target
+  public double getHoodSetpointFromCamera() {
+    PhotonPipelineResult result = m_camera.getLatestResult();
+    if (result.hasTargets()) {
+      PhotonTrackedTarget target = result.getBestTarget();
+      InterpolatingDouble pitch = new InterpolatingDouble(target.getPitch());
+      SmartDashboard.putNumber("Camera pitch", pitch.value);
+      InterpolatingDouble distance = solveForDistance(pitch.value);
+      SmartDashboard.putNumber("Interpolated distance", distance.value);
+      double setpoint = Constants.Hood.hoodAngleTreeMap.getInterpolated(distance).value;
+      SmartDashboard.putNumber("Interpolated setpoint", setpoint);
+      return setpoint;
+    } else {
+      return -1;
+    }
+  }
 
+  public InterpolatingDouble solveForDistance(double pitch) {
+    double cot = 1.0/Math.tan(pitch + Constants.Camera.CAMERA_PITCH_RADIANS);
+    double diff = Constants.Camera.TARGET_HEIGHT_METERS - Constants.Camera.CAMERA_HEIGHT_METERS;
+    return new InterpolatingDouble(cot * diff);
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

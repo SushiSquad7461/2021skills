@@ -149,6 +149,8 @@ public final class Constants {
         public static final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> cameraAngleTreeMap = new InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>();
         
         // Units are in degrees and inches
+        // deprecated because we're doing COOL MATH STUFF now
+        /*
         static {
             cameraAngleTreeMap.put(new InterpolatingDouble(24.3), new InterpolatingDouble(40.0));
             cameraAngleTreeMap.put(new InterpolatingDouble(17.0), new InterpolatingDouble(58.0));
@@ -161,6 +163,7 @@ public final class Constants {
             cameraAngleTreeMap.put(new InterpolatingDouble(-15.0), new InterpolatingDouble(224.0));
             cameraAngleTreeMap.put(new InterpolatingDouble(-17.1), new InterpolatingDouble(249.0));
         }
+        */
     }
 
     // OI

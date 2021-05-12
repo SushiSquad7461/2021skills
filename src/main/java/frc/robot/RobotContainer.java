@@ -8,14 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.AutoDrive;
-import frc.robot.commands.AutoShoot;
-import frc.robot.commands.Shoot;
+import frc.robot.commands.*;
 import frc.robot.subsystems.superstructure.*;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.chassis.Drivetrain;
@@ -25,7 +25,8 @@ import frc.robot.subsystems.superstructure.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import org.photonvision.*;
+ 
 public class RobotContainer {
 
 	// initialize subsystems
@@ -33,13 +34,15 @@ public class RobotContainer {
     public final Drivetrain s_drive;
     public final Flywheel s_flywheel;
     private final Hopper s_hopper;
-    public static Intake s_intake;
+    public final Intake s_intake;
+    public final Hood s_hood;
 
     // initialize commands
-    private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-    public final Shoot c_shoot;
-    public final AutoShoot c_autoShoot;
     public final AutoDrive c_autoDrive;
+    public final AdjustShooter c_AdjustShooter;
+    public final TurnToTarget c_turnToTarget;
+    
+    public final PhotonCamera camera;
 
     // create joysticks
     public static final XboxController driveController = new XboxController(Constants.OI.DRIVE_CONTROLLER);
@@ -51,14 +54,13 @@ public class RobotContainer {
         s_flywheel = new Flywheel();
         s_hopper = new Hopper();
         s_intake = new Intake();
+        s_hood = new Hood();
+        camera = new PhotonCamera("myCamera");
 
         // commands
-        c_shoot = new Shoot(s_flywheel);
-        c_autoShoot = new AutoShoot(s_flywheel, s_hopper);
         c_autoDrive = new AutoDrive(s_drive);
-
-        // set default commands
-        s_flywheel.setDefaultCommand(c_shoot);
+        c_AdjustShooter = new AdjustShooter(s_hood, s_flywheel, camera);
+        c_turnToTarget = new TurnToTarget(s_drive, camera);
 
         s_drive.setDefaultCommand(new RunCommand(
             () -> s_drive.curveDrive(
@@ -71,12 +73,33 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         // run hopper
-        new JoystickButton(operatorController, XboxController.Button.kA.value)
+        new JoystickButton(driveController, XboxController.Button.kA.value)
             .whenPressed(new RunCommand(s_hopper::startSpit, s_hopper))
             .whenReleased(new RunCommand(s_hopper::endSpit, s_hopper));
 
+        /*
+        new JoystickButton(driveController, XboxController.Button.kB.value)
+           .whenPressed(new RunCommand(s_flywheel::enableFlywheel, s_flywheel))
+           .whenReleased(new RunCommand(s_flywheel::stop, s_flywheel));
+        */
+        
+        // This will both enable and adjust the shooter
+        new JoystickButton(driveController, XboxController.Button.kB.value)
+            .toggleWhenPressed(c_AdjustShooter); // yes, both are supposed to be kB
+        
+        new JoystickButton(driveController, XboxController.Button.kBumperRight.value)
+            .whenPressed(new InstantCommand(c_AdjustShooter::cycleSetpoints));
+
+        new JoystickButton(driveController, XboxController.Button.kBumperLeft.value)
+            .whenPressed(new InstantCommand(c_AdjustShooter::unCycleSetpoints));
+
+        
+        // Turn automagically to target while button is being held
+        new JoystickButton(driveController, XboxController.Button.kY.value)
+            .toggleWhenPressed(c_turnToTarget);
         // intake
-        new JoystickButton(operatorController, XboxController.Button.kA.value)
+        /*
+        new JoystickButton(driveController, XboxController.Button.kA.value)
             .whenPressed(new RunCommand(s_intake::startVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
 
@@ -84,6 +107,8 @@ public class RobotContainer {
         new JoystickButton(operatorController, XboxController.Button.kY.value)
             .whenPressed(new RunCommand(s_intake::unVore, s_intake))
             .whenReleased(new RunCommand(s_intake::stopVore, s_intake));
+        
+        */
     }
 
     public SequentialCommandGroup getAutonomousCommand() {

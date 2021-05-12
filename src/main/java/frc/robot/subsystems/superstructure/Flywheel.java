@@ -87,7 +87,7 @@ public class Flywheel extends SubsystemBase {
         
         double controllerVal = controller.calculate(velocity);
         /*
-         * GUESS WHAT BITCH
+         * GUESS WHAT KIDDO
          * IF YOU'RE READING THIS YOU'RE PROBABLY RE-WRITING FLYWHEEL CODE OR 
          * SOMETHING
          * 

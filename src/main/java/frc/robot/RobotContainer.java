@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.superstructure.*;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.chassis.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.superstructure.Hopper;
@@ -112,7 +111,7 @@ public class RobotContainer {
     }
 
     public SequentialCommandGroup getAutonomousCommand() {
-        return new SequentialCommandGroup();
+        return new SequentialCommandGroup(new MoveWheels(s_drive));
     }
 
 }
